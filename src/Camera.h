@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include "transform.h"
+#include "Transform.h"
 
 class Camera : public Transform {
 public:

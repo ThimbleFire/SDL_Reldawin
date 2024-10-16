@@ -1,4 +1,4 @@
-#include "transform.h"
+#include "Transform.h"
 
 void Transform::Translate(int x, int y) {
     this->position.x += x;
