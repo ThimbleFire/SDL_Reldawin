@@ -25,6 +25,11 @@ public:
         return std::to_string(x) + ", " + std::to_string(y);
     }
 
+    // parameter: unsigned char buffer[sizeof(int) * 2];
+    void ToByteArray(unsigned char* buffer) const {
+        std::memcpy(buffer, &x, sizeof(x));       // Copy x to the buffer
+        std::memcpy(buffer + sizeof(x), &y, sizeof(y)); // Copy y to the buffer
+    }
 
     // Directional constants
     static const Vector2i UP;
