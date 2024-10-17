@@ -14,9 +14,18 @@ class UIWindow : SceneObject {
         void Draw() const override;
         void HandleInput() const override;
 
+        // Elements are given a flag which is used to identify them in the event of needing to be removed from the window
+        void AddElement(UIElement* element);
+        void RemoveElement(int flag);
+
         void dispose() const override;
+
+    public: 
+        bool visible = false;
+
     private:
         Vector2i Size;
+        std::vector<UIElement*> element;
 };
 
 #endif
