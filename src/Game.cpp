@@ -2,12 +2,8 @@
 #include "LocalPlayerCharacter.h"
 
 SDL_Texture* spriteTexture;
-Label* lbl_framerate;
-LocalPlayerCharacter* localPlayerCharacter;
-
-
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+std::vector<SceneObject*> sceneObjects;
+Label* label = nullptr;
 
 Game::Game() {
     
@@ -47,12 +43,14 @@ bool Game::init() {
         printf("SDL_ttf could not initialize! TTF_Error: %s\n", SDL_GetError());
         return false;
     }
-
-    const SDL_Color WHITE = { 255, 0, 0, 255 };
-    lbl_framerate = new Label("FRAMERATE {0}", "res/PIXEARG_.TTF", 9, WHITE, renderer);
+ 
     camera.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    LocalPlayerCharacter* localPlayerCharacter = new LocalPlayerCharacter("res/sprite.png", Vector2i::ZERO);
+    sceneObjects.push_back(localPlayerCharacter);
 
-    localPlayerCharacter = new LocalPlayerCharacter("res/sprite.png", Vector2i::ZERO);
+    SDL_Color WHITE = { 255, 255, 255, 255 };
+    label = new Label("FRAMERATE: {0}", "res/PIXEARG_.TTF", 12, WHITE);
+    sceneObjects.push_back(label);
 
     return true;
 }
@@ -88,24 +86,26 @@ void Game::handleEvents() {
             switch (e.key.keysym.sym) {
                 case SDLK_UP:
                     camera.Translate(Vector2i::UP * 5);
-                    lbl_framerate->setText(camera.ToString());
+                    label->setText(camera.ToString());
                     break;
                 case SDLK_DOWN:
                     camera.Translate(Vector2i::DOWN * 5);
-                    lbl_framerate->setText(camera.ToString());
+                    label->setText(camera.ToString());
                     break;
                 case SDLK_LEFT:
                     camera.Translate(Vector2i::LEFT * 5);
-                    lbl_framerate->setText(camera.ToString());
+                    label->setText(camera.ToString());
                     break;
                 case SDLK_RIGHT:
                     camera.Translate(Vector2i::RIGHT * 5);
-                    lbl_framerate->setText(camera.ToString());
-                    break;
-                default:
+                    label->setText(camera.ToString());
                     break;
             }
         }
+    }
+
+    for (auto& obj : sceneObjects) {
+        obj->Update();
     }
 }
 
@@ -113,12 +113,10 @@ void Game::render() {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    // render stuff here
-    localPlayerCharacter->Draw();
-
-    // stop rendering stuff here
+    for (auto& obj : sceneObjects) {
+        obj->Draw();
+    }
     
-    lbl_framerate->render(5, 5);
     SDL_RenderPresent(renderer);
 
     calculateFramerate();

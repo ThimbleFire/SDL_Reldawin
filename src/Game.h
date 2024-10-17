@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <string>
+#include <vector>
 
 #include "Camera.h"
 #include "ResourceRepository.h"
@@ -22,7 +23,12 @@ public:
     void render();
     void update();
 
+
+public:
+    const int SCREEN_WIDTH = 800;
+    const int SCREEN_HEIGHT = 600;
     bool isQuitting = false;
+
 private:
     SDL_Window* window;
     SDL_Renderer* renderer;
