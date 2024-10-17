@@ -14,6 +14,9 @@ class Label : public SceneObject {
 
         void Draw() const override;
         void setText(const std::string& text);
+        void dispose() const override {
+            
+        }
 
     private:
         TTF_Font* font;

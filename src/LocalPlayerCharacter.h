@@ -5,35 +5,13 @@
 
 class LocalPlayerCharacter : public SceneObject {
     public:
-        LocalPlayerCharacter(const std::string& imagePath, Vector2i initialPosition) 
-        : Size(32, 32) {
-            transform.position = initialPosition;    
-            spriteTexture = g_resourceRepository.load(imagePath);
-            if (spriteTexture == nullptr) {
-                printf("Failed to load texture!\n");
-            }            
-        }
+        LocalPlayerCharacter(const std::string& imagePath, Vector2i initialPosition);
         ~LocalPlayerCharacter() = default;
 
-        void Draw() const override {
-            SDL_Rect destRect = { 
-                transform.position.x,
-                transform.position.y, 
-                Size.x, 
-                Size.y 
-            };
-
-            // Adjust position based on the camera
-            destRect.x -= camera.getCameraRect().x;
-            destRect.y -= camera.getCameraRect().y;
-
-            // Render the sprite
-            SDL_RenderCopy(g_resourceRepository.renderer, spriteTexture, nullptr, &destRect);
-        }
-
-        void Update() override {
-            // Implement your update logic here
-        }
+        void Draw() const override;
+        void HandleInput(InputEvent& event) override;
+        void Update() override;
+        void dispose() const override;
 
     private:
         const Vector2i Size;  // Size of the character (32x48 pixels)

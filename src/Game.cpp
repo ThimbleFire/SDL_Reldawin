@@ -2,9 +2,11 @@
 #include "LocalPlayerCharacter.h"
 #include "TileMap.h"
 #include "Math.h"
+#include "InputEvent.h"
 
 SDL_Texture* spriteTexture;
 std::vector<SceneObject*> sceneObjects;
+LocalPlayerCharacter* localPlayerCharacter;
 Label* label = nullptr;
 Label* lbl_screen_clicked = nullptr;
 Label* lbl_world_clicked = nullptr;
@@ -57,7 +59,7 @@ bool Game::init() {
     for(int x = 0; x < 8; x++)
         tileMap->SetTile(x, y, 0);
 
-    LocalPlayerCharacter* localPlayerCharacter = new LocalPlayerCharacter("res/sprite.png", Vector2i(50, 50));
+    localPlayerCharacter = new LocalPlayerCharacter("res/sprite.png", Vector2i(50, 50));
     sceneObjects.push_back(localPlayerCharacter);
 
     SDL_Color WHITE = { 255, 255, 255, 255 };
@@ -79,66 +81,45 @@ bool Game::init() {
     return true;
 }
 
-void Game::calculateFramerate() {
-    // Update frame count
-    frameCount++;
-
-    // Calculate FPS
-    currentTime = SDL_GetTicks(); // Get the current time in milliseconds
-    if (currentTime - lastTime >= 1000) { // If 1 second has passed
-        fps = frameCount; // Set FPS to frame count in that second
-        frameCount = 0; // Reset frame count
-        lastTime = currentTime; // Reset lastTime
-    }
-}
 
 void Game::update() {
     label->setText("Framerate: " + std::to_string(fps));
+    for (auto& obj : sceneObjects) {
+        obj->Update();
+    }
+    camera.setPosition(localPlayerCharacter->transform.position);
 }
 
 void Game::handleEvents() {
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
         if (e.type == SDL_QUIT) {
-            // Handle quit event
             printf("Exiting game...\n");
             isQuitting = true;
         }
+        if (e.type == SDL_KEYDOWN)
+        {
+            const Uint8* state = SDL_GetKeyboardState(NULL);
+            Vector2i inputVector(
+                state[SDL_SCANCODE_A] ? -1 : state[SDL_SCANCODE_D] ? 1 : 0,
+                state[SDL_SCANCODE_S] ? 1 : state[SDL_SCANCODE_W] ? -1 : 0 
+            );
+            localPlayerCharacter->transform.Translate(inputVector * 8);
 
-        // Check for arrow key presses
-        if (e.type == SDL_KEYDOWN) {
-            switch (e.key.keysym.sym) {
-                case SDLK_UP:
-                    camera.Translate(Vector2i::UP * 5);
-                    label->setText(camera.ToString());
-                    break;
-                case SDLK_DOWN:
-                    camera.Translate(Vector2i::DOWN * 5);
-                    label->setText(camera.ToString());
-                    break;
-                case SDLK_LEFT:
-                    camera.Translate(Vector2i::LEFT * 5);
-                    label->setText(camera.ToString());
-                    break;
-                case SDLK_RIGHT:
-                    camera.Translate(Vector2i::RIGHT * 5);
-                    label->setText(camera.ToString());
-                    break;
+        }
+        if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN) {
+            if (e.type == SDL_MOUSEBUTTONDOWN) {
+                InputEvent inputEvent(e.button.x, e.button.y);
+                if(e.button.button == SDL_BUTTON_LEFT) {
+                    lbl_screen_clicked->setText("clicked (screen): " + inputEvent.screen.ToString());
+                    lbl_world_clicked->setText("clicked (world): " + inputEvent.world.ToString());
+                    lbl_cell_clicked->setText("clicked (cell): " + inputEvent.cell.ToString());
+                }
+                for (auto& obj : sceneObjects) {
+                    obj->HandleInput(inputEvent);
+                }
             }
         }
-
-        if(e.type == SDL_MOUSEBUTTONDOWN) {
-            if(e.button.button == SDL_BUTTON_LEFT) {
-                Vector2 world_coordinates = camera.ScreenToWorld(e.button.x, e.button.y);
-                lbl_screen_clicked->setText("clicked (screen): " + std::to_string(e.button.x) + ", " + std::to_string(e.button.y));
-                lbl_world_clicked->setText("clicked (world): " + world_coordinates.ToString());
-                lbl_cell_clicked->setText("clicked (cell): " + Math::WorldToCell(world_coordinates).ToString());
-            }
-        }
-    }
-
-    for (auto& obj : sceneObjects) {
-        obj->Update();
     }
 }
 
@@ -159,7 +140,25 @@ void Game::dispose() {
     SDL_DestroyTexture(spriteTexture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    for (auto& obj : sceneObjects) {
+        obj->dispose();
+        delete obj; 
+    }
+    sceneObjects.clear();
     g_resourceRepository.dispose();
     IMG_Quit();
     SDL_Quit();
+}
+
+void Game::calculateFramerate() {
+    // Update frame count
+    frameCount++;
+
+    // Calculate FPS
+    currentTime = SDL_GetTicks(); // Get the current time in milliseconds
+    if (currentTime - lastTime >= 1000) { // If 1 second has passed
+        fps = frameCount; // Set FPS to frame count in that second
+        frameCount = 0; // Reset frame count
+        lastTime = currentTime; // Reset lastTime
+    }
 }

@@ -7,3 +7,6 @@ void Transform::Translate(int x, int y) {
 void Transform::Translate(Vector2i position) {
     this->position = this->position + position;
 }
+void Transform::Translate(Vector2 position) {
+    this->position = this->position + position;
+}

@@ -38,3 +38,12 @@ void TileMap::Draw() const {
         SDL_RenderCopy(g_resourceRepository.renderer, tile_texture, &srcRect, &destRect);
     }
 }
+
+void TileMap::HandleInput(InputEvent& event) {
+    if(event.handled == false)
+        event.handled = true;
+}
+
+void TileMap::dispose() const {
+    g_resourceRepository.unload("res/tile.png");
+}

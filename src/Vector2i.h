@@ -2,6 +2,7 @@
 #define _VECTOR2I_H_
 
 #include "Base.h"
+#include "Vector2.h"
 
 class Vector2i : public Base {
 public:
@@ -10,6 +11,10 @@ public:
     ~Vector2i() {}
 
     Vector2i operator+(const Vector2i& other) const {
+        return Vector2i(x + other.x, y + other.y);
+    }
+
+    Vector2i operator+(const Vector2& other) const {
         return Vector2i(x + other.x, y + other.y);
     }
 
