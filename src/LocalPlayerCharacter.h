@@ -38,7 +38,7 @@ class LocalPlayerCharacter : public SceneObject {
         }
 
     private:
-        Vector2i Size;  // Size of the character (32x48 pixels)
+        const Vector2i Size;  // Size of the character (32x48 pixels)
         SDL_Texture* spriteTexture;
 };
 
