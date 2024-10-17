@@ -1,3 +1,6 @@
+#ifndef _CAMERA_H_
+#define _CAMERA_H_
+
 #include <SDL2/SDL.h>
 #include "Transform.h"
 
@@ -10,3 +13,7 @@ private:
     int width;       // Width of the camera viewport
     int height;      // Height of the camera viewport
 };
+
+extern Camera camera;
+
+#endif
