@@ -13,9 +13,7 @@ class LocalPlayerCharacter : public SceneObject {
             spriteTexture = g_resourceRepository.load(imagePath, renderer);
             if (spriteTexture == nullptr) {
                 printf("Failed to load texture!\n");
-                return false;
-            }
-            
+            }            
         }
         ~LocalPlayerCharacter() = default;
 
