@@ -1,8 +1,10 @@
 #include "TileMap.h"
 #include "Math.h"
 
-TileMap::TileMap() {
+SDL_Texture* tile_texture;
 
+TileMap::TileMap() {
+    tile_texture = g_resourceRepository.load("res/tile.png");
 }
 
 TileMap::~TileMap() {
@@ -11,10 +13,7 @@ TileMap::~TileMap() {
 
 void TileMap::SetTile(int x, int y, int8_t id) {
     
-    SDL_Texture* tile_texture = g_resourceRepository.load("res/tile.png");
-    tiles[Vector2i(x, y)] = tile_texture;
-    Vector2 world = Math::CellToWorld(x, y);
-    std::cout << std::to_string(world.x) + ", " + std::to_string(world.y) << std::endl;
+    tiles[Vector2i(x, y)] = { 0, 0, TILE_WIDTH, TILE_HEIGHT };
 }
 
 
@@ -22,7 +21,7 @@ void TileMap::Draw() const {
     for(const auto& pair : tiles) {
         // get the elements properties
         const Vector2i& cell = pair.first;
-        SDL_Texture* texture = pair.second;
+        SDL_Rect srcRect = pair.second;
         // translate tile position into world position
         Vector2 world = Math::CellToWorld(cell);
         // adjust position for camera position, I guess
@@ -36,6 +35,6 @@ void TileMap::Draw() const {
         destRect.x -= camera.getCameraRect().x;
         destRect.y -= camera.getCameraRect().y;
         // render the tile
-        SDL_RenderCopy(g_resourceRepository.renderer, texture, nullptr, &destRect);
+        SDL_RenderCopy(g_resourceRepository.renderer, tile_texture, &srcRect, &destRect);
     }
 }

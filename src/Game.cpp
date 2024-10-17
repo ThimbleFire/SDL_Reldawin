@@ -1,10 +1,14 @@
 #include "Game.h"
 #include "LocalPlayerCharacter.h"
 #include "TileMap.h"
+#include "Math.h"
 
 SDL_Texture* spriteTexture;
 std::vector<SceneObject*> sceneObjects;
 Label* label = nullptr;
+Label* lbl_screen_clicked = nullptr;
+Label* lbl_world_clicked = nullptr;
+Label* lbl_cell_clicked = nullptr;
 
 Game::Game() {
     
@@ -46,18 +50,31 @@ bool Game::init() {
     }
  
     camera.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-    LocalPlayerCharacter* localPlayerCharacter = new LocalPlayerCharacter("res/sprite.png", Vector2i::ZERO);
-    sceneObjects.push_back(localPlayerCharacter);
-
-    SDL_Color WHITE = { 255, 255, 255, 255 };
-    label = new Label("FRAMERATE: {0}", "res/PIXEARG_.TTF", 12, WHITE);
-    sceneObjects.push_back(label);
 
     TileMap* tileMap = new TileMap();
     sceneObjects.push_back(tileMap);
     for(int y = 0; y < 8; y++)
     for(int x = 0; x < 8; x++)
         tileMap->SetTile(x, y, 0);
+
+    LocalPlayerCharacter* localPlayerCharacter = new LocalPlayerCharacter("res/sprite.png", Vector2i(50, 50));
+    sceneObjects.push_back(localPlayerCharacter);
+
+    SDL_Color WHITE = { 255, 255, 255, 255 };
+    label = new Label("FRAMERATE: {0}", "res/PIXEARG_.TTF", 12, WHITE);
+    sceneObjects.push_back(label);
+
+    lbl_screen_clicked = new Label("CLICKED: {0}", "res/PIXEARG_.TTF", 12, WHITE);
+    lbl_screen_clicked->transform.Translate(Vector2i::DOWN * 18);
+    sceneObjects.push_back(lbl_screen_clicked); 
+
+    lbl_world_clicked = new Label("CLICKED: {0}", "res/PIXEARG_.TTF", 12, WHITE);
+    lbl_world_clicked->transform.Translate(Vector2i::DOWN * 36);
+    sceneObjects.push_back(lbl_world_clicked); 
+
+    lbl_cell_clicked = new Label("CLICKED: {0}", "res/PIXEARG_.TTF", 12, WHITE);
+    lbl_cell_clicked->transform.Translate(Vector2i::DOWN * 54);
+    sceneObjects.push_back(lbl_cell_clicked);        
     
     return true;
 }
@@ -82,7 +99,7 @@ void Game::update() {
 void Game::handleEvents() {
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
-        if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)) {
+        if (e.type == SDL_QUIT) {
             // Handle quit event
             printf("Exiting game...\n");
             isQuitting = true;
@@ -107,6 +124,15 @@ void Game::handleEvents() {
                     camera.Translate(Vector2i::RIGHT * 5);
                     label->setText(camera.ToString());
                     break;
+            }
+        }
+
+        if(e.type == SDL_MOUSEBUTTONDOWN) {
+            if(e.button.button == SDL_BUTTON_LEFT) {
+                Vector2 world_coordinates = camera.ScreenToWorld(e.button.x, e.button.y);
+                lbl_screen_clicked->setText("clicked (screen): " + std::to_string(e.button.x) + ", " + std::to_string(e.button.y));
+                lbl_world_clicked->setText("clicked (world): " + world_coordinates.ToString());
+                lbl_cell_clicked->setText("clicked (cell): " + Math::WorldToCell(world_coordinates).ToString());
             }
         }
     }

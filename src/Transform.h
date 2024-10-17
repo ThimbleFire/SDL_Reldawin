@@ -3,6 +3,7 @@
 
 #include "Base.h"
 #include "Vector2i.h"
+#include "Vector2.h"
 
 class Transform : public Base {
     public:

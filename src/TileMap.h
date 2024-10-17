@@ -28,7 +28,7 @@ class TileMap : public SceneObject {
         void Draw() const override;
 
     private:
-        std::map<Vector2i, SDL_Texture*> tiles;
+        std::map<Vector2i, SDL_Rect> tiles;
 
 };
 

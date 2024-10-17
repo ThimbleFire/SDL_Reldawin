@@ -12,6 +12,9 @@ public:
         this->width = width;
         this->height = height;
     }
+    Vector2 ScreenToWorld(int x, int y) {
+        return Vector2(x + position.x, y + position.y);
+    }
 
 private:
     int width;       // Width of the camera viewport
