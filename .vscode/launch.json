@@ -5,12 +5,12 @@
             "name": "Run",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/main",  // Path to your executable
+            "program": "${workspaceFolder}/build/main",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",  // Set the current working directory to the project root
+            "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": false,  // Use external console to see output
+            "externalConsole": false,
             "MIMode": "gdb",
             "setupCommands": [
                 {
@@ -19,7 +19,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "build",  // Ensure this is set to your build task
+            "preLaunchTask": "build",  // Run the 'build' task, which depends on 'clean'
             "miDebuggerPath": "/usr/bin/gdb"
         }
     ]

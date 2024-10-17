@@ -26,16 +26,18 @@ public:
     }
 
     // parameter: unsigned char buffer[sizeof(int) * 2];
-    void ToByteArray(unsigned char* buffer) const {
-        std::memcpy(buffer, &x, sizeof(x));       // Copy x to the buffer
-        std::memcpy(buffer + sizeof(x), &y, sizeof(y)); // Copy y to the buffer
-    }
+    // void ToByteArray(unsigned char* buffer) const {
+    //     std::memcpy(buffer, &x, sizeof(x));       // Copy x to the buffer
+    //     std::memcpy(buffer + sizeof(x), &y, sizeof(y)); // Copy y to the buffer
+    // }
 
     // Directional constants
     static const Vector2i UP;
     static const Vector2i DOWN;
     static const Vector2i LEFT;
     static const Vector2i RIGHT;
+    static const Vector2i ZERO;
+    static const Vector2i ONE;
 
     // Data members
     int x = 0;

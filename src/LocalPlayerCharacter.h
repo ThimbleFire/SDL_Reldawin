@@ -1,6 +1,3 @@
-#ifndef _LPC_H_
-#define _LPC_H_
-
 #include "SceneObject.h"
 #include "Vector2i.h"
 #include "Camera.h"
@@ -8,9 +5,10 @@
 
 class LocalPlayerCharacter : public SceneObject {
     public:
-        LocalPlayerCharacter(const std::string& imagePath, Vector2i initialPosition) : Size(32, 48) {
+        LocalPlayerCharacter(const std::string& imagePath, Vector2i initialPosition) 
+        : Size(32, 32) {
             transform.position = initialPosition;    
-            spriteTexture = g_resourceRepository.load(imagePath, renderer);
+            spriteTexture = g_resourceRepository.load(imagePath);
             if (spriteTexture == nullptr) {
                 printf("Failed to load texture!\n");
             }            
@@ -30,7 +28,7 @@ class LocalPlayerCharacter : public SceneObject {
             destRect.y -= camera.getCameraRect().y;
 
             // Render the sprite
-            SDL_RenderCopy(renderer, spriteTexture, nullptr, &destRect);
+            SDL_RenderCopy(g_resourceRepository.renderer, spriteTexture, nullptr, &destRect);
         }
 
         void Update() override {
@@ -41,5 +39,3 @@ class LocalPlayerCharacter : public SceneObject {
         const Vector2i Size;  // Size of the character (32x48 pixels)
         SDL_Texture* spriteTexture;
 };
-
-#endif

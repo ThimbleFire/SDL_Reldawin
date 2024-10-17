@@ -8,8 +8,6 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    SDL_Event e;
-
     while (!game.isQuitting) {
 
         game.handleEvents();

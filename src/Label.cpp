@@ -1,10 +1,8 @@
 #include "Label.h"
 #include <iostream>
 
-Label::Label(const std::string& text, const std::string& fontPath, int fontSize, SDL_Color color, SDL_Renderer* renderer)
-    : text(text), color(color), renderer(renderer), font(nullptr), texture(nullptr), width(0), height(0) {
-
-    // Load the font
+Label::Label(const std::string& text, const std::string& fontPath, int fontSize, SDL_Color color, SDL_Renderer* renderer)    
+: font(nullptr), renderer(renderer), color(color), text(text), texture(nullptr), width(0), height(0) {
     font = TTF_OpenFont(fontPath.c_str(), fontSize);
     if (font == nullptr) {
         std::cerr << "Failed to load font: " << TTF_GetError() << std::endl;

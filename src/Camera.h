@@ -6,8 +6,12 @@
 
 class Camera : public Transform {
 public:
-    Camera(int width, int height);
+    Camera() {}
     SDL_Rect getCameraRect() const;
+    void setSize(int width, int height) {
+        this->width = width;
+        this->height = height;
+    }
 
 private:
     int width;       // Width of the camera viewport

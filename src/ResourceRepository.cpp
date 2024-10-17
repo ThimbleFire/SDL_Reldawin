@@ -7,7 +7,11 @@ ResourceRepository::~ResourceRepository() {
     dispose();  // Clean up resources on destruction
 }
 
-SDL_Texture* ResourceRepository::load(const std::string& path, SDL_Renderer* renderer) {
+void ResourceRepository::Initialize(SDL_Renderer* renderer) {
+    this->renderer = renderer;
+}
+
+SDL_Texture* ResourceRepository::load(const std::string& path) {
     // Check if the texture is already loaded
     auto it = textures.find(path);
     if (it != textures.end()) {

@@ -27,7 +27,6 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_Texture* spriteTexture;
-    Camera* camera;
 
 
     Uint32 lastTime; // Last frame time

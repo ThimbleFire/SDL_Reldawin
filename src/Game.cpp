@@ -1,7 +1,10 @@
 #include "Game.h"
+#include "LocalPlayerCharacter.h"
 
 SDL_Texture* spriteTexture;
 Label* lbl_framerate;
+LocalPlayerCharacter* localPlayerCharacter;
+
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -36,6 +39,8 @@ bool Game::init() {
         printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
+
+    g_resourceRepository.Initialize(renderer);
     
     // Initialize SDL_ttf
     if (TTF_Init() == -1) {
@@ -43,8 +48,11 @@ bool Game::init() {
         return false;
     }
 
-    lbl_framerate = new Label("FRAMERATE {0}", "res/PIXEARG_.TTF", 9, { 255, 255, 255, 255 }, renderer);
+    const SDL_Color WHITE = { 255, 0, 0, 255 };
+    lbl_framerate = new Label("FRAMERATE {0}", "res/PIXEARG_.TTF", 9, WHITE, renderer);
     camera.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+    localPlayerCharacter = new LocalPlayerCharacter("res/sprite.png", Vector2i::ZERO);
 
     return true;
 }
@@ -80,19 +88,19 @@ void Game::handleEvents() {
             switch (e.key.keysym.sym) {
                 case SDLK_UP:
                     camera.Translate(Vector2i::UP * 5);
-                    lbl_framerate->setText(camera->ToString());
+                    lbl_framerate->setText(camera.ToString());
                     break;
                 case SDLK_DOWN:
                     camera.Translate(Vector2i::DOWN * 5);
-                    lbl_framerate->setText(camera->ToString());
+                    lbl_framerate->setText(camera.ToString());
                     break;
                 case SDLK_LEFT:
                     camera.Translate(Vector2i::LEFT * 5);
-                    lbl_framerate->setText(camera->ToString());
+                    lbl_framerate->setText(camera.ToString());
                     break;
                 case SDLK_RIGHT:
                     camera.Translate(Vector2i::RIGHT * 5);
-                    lbl_framerate->setText(camera->ToString());
+                    lbl_framerate->setText(camera.ToString());
                     break;
                 default:
                     break;
@@ -101,12 +109,12 @@ void Game::handleEvents() {
     }
 }
 
-
 void Game::render() {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
     // render stuff here
+    localPlayerCharacter->Draw();
 
     // stop rendering stuff here
     
