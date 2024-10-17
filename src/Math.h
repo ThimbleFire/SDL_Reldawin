@@ -28,6 +28,13 @@ class Math {
             y = std::floor(y + 0.5f);
             return Vector2i(x, y);
         }
+        
+        static Vector2 ToIsometric(const Vector2i& inputVector) {
+            Vector2 isometricMovement;
+            isometricMovement.x = (inputVector.x - inputVector.y) * (TILE_WIDTH / 2);
+            isometricMovement.y = (inputVector.x + inputVector.y) * (TILE_HEIGHT / 2);
+            return isometricMovement;
+        }
 };
 
 #endif

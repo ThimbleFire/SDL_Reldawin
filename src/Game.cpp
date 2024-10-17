@@ -104,7 +104,9 @@ void Game::handleEvents() {
                 state[SDL_SCANCODE_A] ? -1 : state[SDL_SCANCODE_D] ? 1 : 0,
                 state[SDL_SCANCODE_S] ? 1 : state[SDL_SCANCODE_W] ? -1 : 0 
             );
-            localPlayerCharacter->transform.Translate(inputVector * 8);
+            Vector2 dir = Math::ToIsometric(inputVector);
+            localPlayerCharacter->transform.Translate(dir);
+            lbl_screen_clicked->setText(dir.ToString());
 
         }
         if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN) {
