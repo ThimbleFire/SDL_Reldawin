@@ -36,13 +36,7 @@ bool Game::init() {
         printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
         return false;
     }
-
-    spriteTexture = g_resourceRepository.load("res/sprite.png", renderer);
-    if (spriteTexture == nullptr) {
-        printf("Failed to load texture!\n");
-        return false;
-    }
-
+    
     // Initialize SDL_ttf
     if (TTF_Init() == -1) {
         printf("SDL_ttf could not initialize! TTF_Error: %s\n", SDL_GetError());
