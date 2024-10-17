@@ -25,6 +25,12 @@ public:
         return std::to_string(x) + ", " + std::to_string(y);
     }
 
+    bool operator<(const Vector2i& other) const {
+        if (x < other.x) return true;
+        if (x == other.x && y < other.y) return true;
+        return false;
+    }
+
     // parameter: unsigned char buffer[sizeof(int) * 2];
     // void ToByteArray(unsigned char* buffer) const {
     //     std::memcpy(buffer, &x, sizeof(x));       // Copy x to the buffer

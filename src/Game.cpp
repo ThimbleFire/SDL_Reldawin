@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "LocalPlayerCharacter.h"
+#include "TileMap.h"
 
 SDL_Texture* spriteTexture;
 std::vector<SceneObject*> sceneObjects;
@@ -52,6 +53,12 @@ bool Game::init() {
     label = new Label("FRAMERATE: {0}", "res/PIXEARG_.TTF", 12, WHITE);
     sceneObjects.push_back(label);
 
+    TileMap* tileMap = new TileMap();
+    sceneObjects.push_back(tileMap);
+    for(int y = 0; y < 8; y++)
+    for(int x = 0; x < 8; x++)
+        tileMap->SetTile(x, y, 0);
+    
     return true;
 }
 
@@ -69,7 +76,7 @@ void Game::calculateFramerate() {
 }
 
 void Game::update() {
-    //lbl_framerate->setText("Framerate: " + std::to_string(fps));
+    label->setText("Framerate: " + std::to_string(fps));
 }
 
 void Game::handleEvents() {
