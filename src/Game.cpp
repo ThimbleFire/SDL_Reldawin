@@ -50,7 +50,7 @@ bool Game::init() {
     }
 
     lbl_framerate = new Label("FRAMERATE {0}", "res/PIXEARG_.TTF", 9, { 255, 255, 255, 255 }, renderer);
-    camera = new Camera(SCREEN_WIDTH, SCREEN_HEIGHT);
+    camera.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
     return true;
 }
@@ -85,19 +85,19 @@ void Game::handleEvents() {
         if (e.type == SDL_KEYDOWN) {
             switch (e.key.keysym.sym) {
                 case SDLK_UP:
-                    camera->Translate(Vector2i::UP * 5);
+                    camera.Translate(Vector2i::UP * 5);
                     lbl_framerate->setText(camera->ToString());
                     break;
                 case SDLK_DOWN:
-                    camera->Translate(Vector2i::DOWN * 5);
+                    camera.Translate(Vector2i::DOWN * 5);
                     lbl_framerate->setText(camera->ToString());
                     break;
                 case SDLK_LEFT:
-                    camera->Translate(Vector2i::LEFT * 5);
+                    camera.Translate(Vector2i::LEFT * 5);
                     lbl_framerate->setText(camera->ToString());
                     break;
                 case SDLK_RIGHT:
-                    camera->Translate(Vector2i::RIGHT * 5);
+                    camera.Translate(Vector2i::RIGHT * 5);
                     lbl_framerate->setText(camera->ToString());
                     break;
                 default:
@@ -112,13 +112,10 @@ void Game::render() {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    // render objects via the camera
-    SDL_Rect destRect = { 5, 5, 32, 32 };
-    destRect.x -= camera->getCameraRect().x;
-    destRect.y -= camera->getCameraRect().y;
-    SDL_RenderCopy(renderer, spriteTexture, nullptr, &destRect);
+    // render stuff here
 
-
+    // stop rendering stuff here
+    
     lbl_framerate->render(5, 5);
     SDL_RenderPresent(renderer);
 
