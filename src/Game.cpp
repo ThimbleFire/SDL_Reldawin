@@ -85,13 +85,12 @@ bool Game::init() {
     uiWindow->transform.size.set(300, 350);
     sceneObjects.push_back(uiWindow);
 
-    UIResizeableTexture* uiBody = new UIResizeableTexture(uiWindow->transform, { 158, 92, 24, 24 }, 3, UIResizeableTexture::LayoutMode::ANCHOR);
-    uiBody->setSize(200, 250);
+    UIResizeableTexture* uiBody = new UIResizeableTexture(uiWindow->transform, { 186, 92, 24, 24 }, 1, UIResizeableTexture::LayoutMode::ANCHOR);
     uiBody->setAnchorPoints(0.0f, 0.0f, 1.0f, 1.0f, 0, 0, 0, 0);
     uiWindow->AddElement(uiBody);
 
-    UIResizeableTexture* uiHeader = new UIResizeableTexture(uiWindow->transform, { 158, 92, 24, 24 }, 3, UIResizeableTexture::LayoutMode::ANCHOR);
-    uiHeader->setAnchorPoints(0.0f, 0.0f, 1.0f, 0.0f, 5, 5, 5, -30);
+    UIResizeableTexture* uiHeader = new UIResizeableTexture(uiWindow->transform, { 242, 92, 24, 24 }, 1, UIResizeableTexture::LayoutMode::ANCHOR);
+    uiHeader->setAnchorPoints(0.0f, 0.0f, 1.0f, 0.0f, 3, 3, 21, 15);
     uiWindow->AddElement(uiHeader);
     
     return true;

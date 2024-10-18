@@ -89,7 +89,7 @@ class UIResizeableTexture : public UIElement {
             
             transform.size.set(
                 static_cast<int>((right - left) * parentTransform.size.x) - (pixel_left + pixel_right),
-                static_cast<int>((bottom - top) * parentTransform.size.y) - (pixel_top + pixel_bottom)
+                static_cast<int>((bottom - top) * parentTransform.size.y) - (pixel_top - pixel_bottom)
             );
             
             setSize(transform.size);
