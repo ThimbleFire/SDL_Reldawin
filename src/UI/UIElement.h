@@ -7,7 +7,7 @@
 class UIElement : public SceneObject {
     public:
         UIElement() {
-        spritesheet = g_resourceRepository.load("res/UI.png");
+            spritesheet = g_resourceRepository.load("res/UI.png");
         }
         ~UIElement();
 
@@ -15,7 +15,7 @@ class UIElement : public SceneObject {
             
         }
 
-        void HandleInput() const override {
+        void HandleInput(InputEvent& event) const override {
             
         }
 
