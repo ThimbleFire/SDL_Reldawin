@@ -8,17 +8,21 @@
 
 class InputEvent {
     public:
-        InputEvent(int x, int y) {
+        enum Type { NONE, LMB_PRESSED, LMB_RELEASED, RMB_PRESSED, RMB_RELEASED }
+
+    public:
+        InputEvent(int x, int y, Type type) : type{type) {
             screen = Vector2i(x, y);
             world = camera.ScreenToWorld(x, y);
             cell = Math::WorldToCell(world.x, world.y);
         } 
     
     public:
-        Vector2i screen;
-        Vector2 world;
-        Vector2i cell;
-        bool handled = false; 
+        readonly Vector2i screen;
+        readonly Vector2 world;
+        readonly Vector2i cell;
+        bool handled = false;
+        readonly Type type = Type.NONE;
 };
 
 #endif
