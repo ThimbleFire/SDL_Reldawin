@@ -26,7 +26,7 @@ class Button : public UIElement {
             SDL_RenderCopy(g_resourceRepository.renderer, spritesheet, &srcRect, &destRect);
         }
 
-        void HandleInput() const override {
+        void HandleInput(InputEvent& event) const override {
         }
 
         void dispose() const override {
