@@ -6,10 +6,22 @@
 
 class UIElement : public SceneObject {
     public:
-        UIElement() {
+        UIElement(Transform* parentTransform) {
             spritesheet = g_resourceRepository.load("res/UI.png");
+            parentTransform = parentTransform;
+            destRect = { 
+                transform.position.x + parentTransform->position.x, 
+                transform.position.y + parentTransform->position.y, 
+                Size.x, 
+                Size.y 
+            };
+            srcRect = { 
+                0, 
+                0, 
+                32, 
+                32 
+            };
         }
-        ~UIElement();
 
         void Draw() const override {
             
@@ -30,6 +42,8 @@ class UIElement : public SceneObject {
         Vector2i Size;
         Transform* parentTransform;
         SDL_Texture* spritesheet;
+        SDL_Rect srcRect;
+        SDL_Rect destRect;  
 };
 
 #endif
