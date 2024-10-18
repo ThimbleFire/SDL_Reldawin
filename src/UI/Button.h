@@ -1,6 +1,8 @@
 #ifndef _BUTTON_H_
 #define _BUTTON_H_
 
+#include "UIElement.h"
+
 class Button : public UIElement {
     public:
         void HandleInput(InputEvent& event) const override {
