@@ -4,8 +4,8 @@
 #include "SceneObject.h"
 #include "ResourceRepository.h"
 
-/* UIWindow class is a dynamic, reusable interface that can have UI elements added to it. 
-UIElements are anchored to it and are rendered over it.*/
+/* UIWindow class is an image with a bunch of elements inside of it. These elements are best thought of as rectangles.
+For example a draggable rectangle, a clickable rectangle, a mouseover rectangle.*/
 class UIWindow : SceneObject {
     public:
         UIWindow(int x, int y, int w) : Size(w, 0) { }
