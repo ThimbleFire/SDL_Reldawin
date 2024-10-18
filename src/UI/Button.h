@@ -23,7 +23,7 @@ class Button : public UIElement {
         void Draw() const override {
             destRect.x -= camera.getCameraRect().x;
             destRect.y -= camera.getCameraRect().y;
-            SDL_RenderCopy(g_resourceRepository.renderer, spriteTexture, &srcRect, &destRect);
+            SDL_RenderCopy(g_resourceRepository.renderer, spritesheet, &srcRect, &destRect);
         }
 
         void HandleInput() const override {
