@@ -9,15 +9,24 @@ class UIElement : public SceneObject {
         UIElement();
         ~UIElement();
 
-        void Draw() const override;
-        void HandleInput() const override;
-        void dispose() const override;
+        void Draw() const override {
+            
+        }
+
+        void HandleInput() const override {
+            
+        }
+
+        void dispose() const override {
+            
+        }
 
     public:
         int flag = -1;
 
     private:
         Vector2i Size;
+        Transform* parentTransform;
 };
 
 #endif
