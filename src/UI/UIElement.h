@@ -6,7 +6,9 @@
 
 class UIElement : public SceneObject {
     public:
-        UIElement();
+        UIElement() {
+        spritesheet = g_resourceRepository.load("res/UI.png");
+        }
         ~UIElement();
 
         void Draw() const override {
@@ -24,9 +26,10 @@ class UIElement : public SceneObject {
     public:
         int flag = -1;
 
-    private:
+    protected:
         Vector2i Size;
         Transform* parentTransform;
+        SDL_Texture* spritesheet;
 };
 
 #endif
