@@ -24,7 +24,7 @@ class UIElement : public SceneObject {
         }
 
         void Draw() const override {
-            
+            SDL_RenderCopy(g_resourceRepository.renderer, spritesheet, &srcRect, &destRect);
         }
 
         void HandleInput(InputEvent& event) const override {
