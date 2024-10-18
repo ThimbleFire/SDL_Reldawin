@@ -16,17 +16,22 @@ class Button : public UIElement {
                 0, 
                 32, 
                 32 
-            }
+            };
         }
         ~Button();
 
         void Draw() const override {
-            destRect.x -= camera.getCameraRect().x;
-            destRect.y -= camera.getCameraRect().y;
             SDL_RenderCopy(g_resourceRepository.renderer, spritesheet, &srcRect, &destRect);
         }
 
         void HandleInput(InputEvent& event) const override {
+            if(event.handled) return;
+            
+
+            if (destRect.SDL_HasIntersection(event.screen)) {
+                printf("Clicked!);
+                event.handled = true;
+            }
         }
 
         void dispose() const override {
