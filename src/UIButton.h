@@ -3,9 +3,10 @@
 
 #include "UIElement.h"
 
-class Button : public UIElement {
+class UIButton : public UIElement {
     public:
-        void HandleInput(InputEvent& event) const override {
+        UIButton(Transform& parentTransform) : UIElement(parentTransform) { }
+        void HandleInput(InputEvent& event) override {
             if(event.handled) return;
             
             SDL_Point point = { event.screen.x, event.screen.y };
@@ -13,7 +14,7 @@ class Button : public UIElement {
                 printf("Clicked!\n");
                 event.handled = true;
             }
-        }    
+        }
 };
 
 #endif

@@ -13,7 +13,7 @@ TileMap::~TileMap() {
 
 void TileMap::SetTile(int x, int y, int8_t id) {
     
-    tiles[Vector2i(x, y)] = { 128, 0, TILE_WIDTH, 48 };
+    tiles[Vector2i(x, y)] = { 192, 64, TILE_WIDTH, 32 };
 }
 
 
@@ -29,7 +29,7 @@ void TileMap::Draw() const {
             transform.position.x + world.x,
             transform.position.y + world.y, 
             64, 
-            48 
+            32 
         };
         // Adjust position based on the camera
         destRect.x -= camera.getCameraRect().x;
@@ -40,8 +40,7 @@ void TileMap::Draw() const {
 }
 
 void TileMap::HandleInput(InputEvent& event) {
-    if(event.handled == false)
-        event.handled = true;
+    if(event.handled) return;
 }
 
 void TileMap::dispose() const {

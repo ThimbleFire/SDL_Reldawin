@@ -36,6 +36,15 @@ public:
         return false;
     }
 
+    void set(int x, int y) {
+        this->x = x;
+        this->y = y;
+    }
+    void set(Vector2i value) {
+        this->x = value.x;
+        this->y = value.y;
+    }
+
     // parameter: unsigned char buffer[sizeof(int) * 2];
     // void ToByteArray(unsigned char* buffer) const {
     //     std::memcpy(buffer, &x, sizeof(x));       // Copy x to the buffer

@@ -10,8 +10,19 @@ LocalPlayerCharacter::LocalPlayerCharacter(const std::string& imagePath, Vector2
 }
 
 void LocalPlayerCharacter::HandleInput(InputEvent& event) {
-    if(event.handled == false)
+    if(event.handled) return;
+        
+    if (event.event.type == SDL_KEYDOWN)
+    {
+        const Uint8* state = SDL_GetKeyboardState(NULL);
+        Vector2i inputVector(
+            state[SDL_SCANCODE_A] ? -1 : state[SDL_SCANCODE_D] ? 1 : 0,
+            state[SDL_SCANCODE_S] ? 1 : state[SDL_SCANCODE_W] ? -1 : 0 
+        );
+        Vector2 dir = Math::ToIsometric(inputVector);
+        transform.Translate(dir);
         event.handled = true;
+    }
 }
 
 void LocalPlayerCharacter::Draw() const {

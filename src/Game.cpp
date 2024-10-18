@@ -3,6 +3,8 @@
 #include "TileMap.h"
 #include "Math.h"
 #include "InputEvent.h"
+#include "UI.h"
+#include <random>
 
 SDL_Texture* spriteTexture;
 std::vector<SceneObject*> sceneObjects;
@@ -11,6 +13,7 @@ Label* label = nullptr;
 Label* lbl_screen_clicked = nullptr;
 Label* lbl_world_clicked = nullptr;
 Label* lbl_cell_clicked = nullptr;
+UIWindow* uiWindow = nullptr;
 
 Game::Game() {
     
@@ -63,24 +66,36 @@ bool Game::init() {
     sceneObjects.push_back(localPlayerCharacter);
 
     SDL_Color WHITE = { 255, 255, 255, 255 };
-    label = new Label("FRAMERATE: {0}", "res/PIXEARG_.TTF", 12, WHITE);
+    label = new Label("FRAMERATE: {0}", "res/PIXEARG_.TTF", 10, WHITE);
     sceneObjects.push_back(label);
 
-    lbl_screen_clicked = new Label("CLICKED: {0}", "res/PIXEARG_.TTF", 12, WHITE);
-    lbl_screen_clicked->transform.Translate(Vector2i::DOWN * 18);
+    lbl_screen_clicked = new Label("CLICKED: {0}", "res/PIXEARG_.TTF", 10, WHITE);
+    lbl_screen_clicked->transform.Translate(Vector2i::DOWN * 12);
     sceneObjects.push_back(lbl_screen_clicked); 
 
-    lbl_world_clicked = new Label("CLICKED: {0}", "res/PIXEARG_.TTF", 12, WHITE);
-    lbl_world_clicked->transform.Translate(Vector2i::DOWN * 36);
+    lbl_world_clicked = new Label("CLICKED: {0}", "res/PIXEARG_.TTF", 10, WHITE);
+    lbl_world_clicked->transform.Translate(Vector2i::DOWN * 24);
     sceneObjects.push_back(lbl_world_clicked); 
 
-    lbl_cell_clicked = new Label("CLICKED: {0}", "res/PIXEARG_.TTF", 12, WHITE);
-    lbl_cell_clicked->transform.Translate(Vector2i::DOWN * 54);
-    sceneObjects.push_back(lbl_cell_clicked);        
+    lbl_cell_clicked = new Label("CLICKED: {0}", "res/PIXEARG_.TTF", 10, WHITE);
+    lbl_cell_clicked->transform.Translate(Vector2i::DOWN * 36);
+    sceneObjects.push_back(lbl_cell_clicked);
+
+    uiWindow = new UIWindow();
+    uiWindow->transform.size.set(300, 350);
+    sceneObjects.push_back(uiWindow);
+
+    UIResizeableTexture* uiBody = new UIResizeableTexture(uiWindow->transform, { 158, 92, 24, 24 }, 3, UIResizeableTexture::LayoutMode::ANCHOR);
+    uiBody->setSize(200, 250);
+    uiBody->setAnchorPoints(0.0f, 0.0f, 1.0f, 1.0f, 0, 0, 0, 0);
+    uiWindow->AddElement(uiBody);
+
+    UIResizeableTexture* uiHeader = new UIResizeableTexture(uiWindow->transform, { 158, 92, 24, 24 }, 3, UIResizeableTexture::LayoutMode::ANCHOR);
+    uiHeader->setAnchorPoints(0.0f, 0.0f, 1.0f, 0.0f, 5, 5, 5, -30);
+    uiWindow->AddElement(uiHeader);
     
     return true;
 }
-
 
 void Game::update() {
     label->setText("Framerate: " + std::to_string(fps));
@@ -97,26 +112,31 @@ void Game::handleEvents() {
             printf("Exiting game...\n");
             isQuitting = true;
         }
-        if (e.type == SDL_KEYDOWN)
+        if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN) {
+            InputEvent ievent(e);
+            for (auto& obj : sceneObjects) {
+                obj->HandleInput(ievent);
+            }            
+            lbl_screen_clicked->setText("clicked (screen): " + ievent.screen.ToString());
+            lbl_world_clicked->setText("clicked (world): " + ievent.world.ToString());
+            lbl_cell_clicked->setText("clicked (cell): " + ievent.cell.ToString() + ", handled: " + std::to_string(ievent.handled));
+        }
+        if(e.type == SDL_KEYDOWN)
         {
             const Uint8* state = SDL_GetKeyboardState(NULL);
+            if(state[SDL_SCANCODE_E])
+            {
+                std::random_device rd;
+                std::mt19937 gen(rd());
+                std::uniform_int_distribution<> dis(50, 500);
+                uiWindow->transform.SetSize(dis(gen), dis(gen));
+                return;
+            }
             Vector2i inputVector(
                 state[SDL_SCANCODE_A] ? -1 : state[SDL_SCANCODE_D] ? 1 : 0,
                 state[SDL_SCANCODE_S] ? 1 : state[SDL_SCANCODE_W] ? -1 : 0 
             );
-            Vector2 dir = Math::ToIsometric(inputVector);
-            localPlayerCharacter->transform.Translate(dir);
-            lbl_screen_clicked->setText(dir.ToString());
-
-        }
-        if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN) {
-            InputEvent ievent(e);
-            lbl_screen_clicked->setText("clicked (screen): " + ievent.screen.ToString());
-            lbl_world_clicked->setText("clicked (world): " + ievent.world.ToString());
-            lbl_cell_clicked->setText("clicked (cell): " + ievent.cell.ToString());
-            for (auto& obj : sceneObjects) {
-                obj->HandleInput(ievent);
-            }
+            uiWindow->transform.Translate(inputVector * 10);
         }
     }
 }
