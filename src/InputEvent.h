@@ -8,21 +8,30 @@
 
 class InputEvent {
     public:
-        enum Type { NONE, LMB_PRESSED, LMB_RELEASED, RMB_PRESSED, RMB_RELEASED }
-
-    public:
-        InputEvent(int x, int y, Type type) : type{type) {
-            screen = Vector2i(x, y);
-            world = camera.ScreenToWorld(x, y);
-            cell = Math::WorldToCell(world.x, world.y);
+        InputEvent(SDL_Event event) : event(event) {   
+            switch(event.type)
+            {
+                case SDL_MOUSEBUTTONDOWN:
+                case SDL_MOUSEBUTTONUP:
+                    screen = Vector2i(event.button.x, event.button.y);
+                    world = camera.ScreenToWorld(event.button.x, event.button.y);
+                    cell = Math::WorldToCell(world.x, world.y);
+                break;
+                case SDL_MOUSEMOTION:
+                    screen = Vector2i(event.motion.x, event.motion.y);
+                    world = camera.ScreenToWorld(event.motion.x, event.motion.y);
+                    cell = Math::WorldToCell(world.x, world.y);
+                break;
+            }                    
         } 
     
     public:
-        readonly Vector2i screen;
-        readonly Vector2 world;
-        readonly Vector2i cell;
+        Vector2i screen;
+        Vector2 world;
+        Vector2i cell;
+
         bool handled = false;
-        readonly Type type = Type.NONE;
+        SDL_Event event;
 };
 
 #endif

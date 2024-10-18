@@ -110,16 +110,12 @@ void Game::handleEvents() {
 
         }
         if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN) {
-            if (e.type == SDL_MOUSEBUTTONDOWN) {
-                InputEvent inputEvent(e.button.x, e.button.y);
-                if(e.button.button == SDL_BUTTON_LEFT) {
-                    lbl_screen_clicked->setText("clicked (screen): " + inputEvent.screen.ToString());
-                    lbl_world_clicked->setText("clicked (world): " + inputEvent.world.ToString());
-                    lbl_cell_clicked->setText("clicked (cell): " + inputEvent.cell.ToString());
-                }
-                for (auto& obj : sceneObjects) {
-                    obj->HandleInput(inputEvent);
-                }
+            InputEvent ievent(e);
+            lbl_screen_clicked->setText("clicked (screen): " + ievent.screen.ToString());
+            lbl_world_clicked->setText("clicked (world): " + ievent.world.ToString());
+            lbl_cell_clicked->setText("clicked (cell): " + ievent.cell.ToString());
+            for (auto& obj : sceneObjects) {
+                obj->HandleInput(ievent);
             }
         }
     }
@@ -144,7 +140,7 @@ void Game::dispose() {
     SDL_DestroyWindow(window);
     for (auto& obj : sceneObjects) {
         obj->dispose();
-        delete obj; 
+        obj = nullptr;
     }
     sceneObjects.clear();
     g_resourceRepository.dispose();
