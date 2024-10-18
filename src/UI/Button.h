@@ -18,7 +18,6 @@ class Button : public UIElement {
                 32 
             };
         }
-        ~Button();
 
         void Draw() const override {
             SDL_RenderCopy(g_resourceRepository.renderer, spritesheet, &srcRect, &destRect);
@@ -27,14 +26,11 @@ class Button : public UIElement {
         void HandleInput(InputEvent& event) const override {
             if(event.handled) return;
             
-
-            if (destRect.SDL_HasIntersection(event.screen)) {
-                printf("Clicked!);
+            SDL_Point point = { event.screen.x, event.screen.y };
+            if (SDL_PointInRect(&point, &destRect)) {
+                printf("Clicked!\n");
                 event.handled = true;
             }
-        }
-
-        void dispose() const override {
         }
     private:
         SDL_Rect srcRect;
