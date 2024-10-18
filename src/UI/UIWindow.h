@@ -8,7 +8,7 @@
 For example a draggable rectangle, a clickable rectangle, a mouseover rectangle.*/
 class UIWindow : SceneObject {
     public:
-        UIWindow(int x, int y, int w) : Size(w, 0) { }
+        UIWindow();
         ~UIWindow();
 
         void Draw() const override;
