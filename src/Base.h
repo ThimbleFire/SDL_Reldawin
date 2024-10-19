@@ -8,7 +8,7 @@ class Base {
         virtual std::string ToString() const = 0;
     
     public:
-        std::string Name;
+        std::string Name = "unnamed gameobject";
 };
 
 #endif

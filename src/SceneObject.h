@@ -2,6 +2,7 @@
 #define _SCENEOBJECT_H_
 
 #include <iostream>
+#include <string>
 #include "Transform.h"
 #include "InputEvent.h"
 
@@ -12,8 +13,12 @@ class SceneObject : public Base {
         virtual void Update() {}
         virtual void HandleInput(InputEvent& event) {}   
         // Redraw instructs the inheriting object to recalculate destRect
-        virtual void Redraw() {}   
-        virtual void dispose() const = 0;
+        virtual void Redraw() {
+            for (SceneObject* child : children) {
+                child->Redraw();
+            }
+        }
+        virtual void dispose() const {};
 
         std::string ToString() const override {
             return Name;
@@ -28,18 +33,17 @@ class SceneObject : public Base {
             children.push_back(child);
             
             this->transform.SubscribeToPositionChange([child, this]() {
-                printf("child moved to reflect parent position change\n");
                 child->transform.UpdateInAccordanceWithParent(this->transform);
                 child->Redraw();
             });
             this->transform.SubscribeToSizeChange([child, this]() {
                 child->transform.UpdateInAccordanceWithParent(this->transform);
-                printf("child resized to reflect parent size change\n");
                 child->Redraw();
             });
 
             child->transform.UpdateInAccordanceWithParent(this->transform);
-            child->Redraw();
+            std::cerr << "["+ToString()+"] " + transform.size.ToString() << std::endl;
+            Redraw();
         }
 
         virtual ~SceneObject() {

@@ -18,11 +18,13 @@ class Transform : public Base {
         void Translate(Vector2i position);
         void Translate(Vector2 position);
 
-        void setAnchorPoints(float left, float top, float right, float bottom, int pixel_left, int pixel_top, int pixel_right, int pixel_bottom){
+        void setAnchorPoints(float left, float top, float right, float bottom) {
             this->left = left;
             this->top = top;
             this->bottom = bottom;
             this->right = right;
+        }
+        void setAnchorPixels(int pixel_left, int pixel_top, int pixel_right, int pixel_bottom) {
             this->pixel_left = pixel_left;
             this->pixel_top = pixel_top;
             this->pixel_right = pixel_right;
@@ -49,7 +51,7 @@ class Transform : public Base {
         void NotifySizeChanged();
 
     private:
-        float left = 0.0f, top = 0.0f, right = 0.0f, bottom = 0.0f;
+        float left = 0.0f, top = 0.0f, right = 1.0f, bottom = 1.0f;
         int pixel_left = 0, pixel_top = 0, pixel_right = 0, pixel_bottom = 0;
 };
 

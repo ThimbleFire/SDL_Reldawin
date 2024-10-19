@@ -81,23 +81,19 @@ bool Game::init() {
     lbl_cell_clicked->transform.Translate(Vector2i::DOWN * 36);
     sceneObjects.push_back(lbl_cell_clicked);
 
-    uiWindow = new UIWindow();
-    uiWindow->Name = "UIWindow";
+    // create the user interface window
+    uiWindow = new UIWindow("UIWindow");
     uiWindow->transform.size.set(300, 350);
     sceneObjects.push_back(uiWindow);
 
-    UIResizeableTexture* uiBody = new UIResizeableTexture({ 186, 92, 24, 24 }, 1);
-    uiBody->Name = "UIBody";
-    uiBody->transform.setAnchorPoints(0.0f, 0.0f, 1.0f, 1.0f, 0, 0, 0, 0);
-    uiWindow->addChild(uiBody);
+    UIResizeableTexture* uiBody = new UIResizeableTexture("UIBody", { 186, 92, 24, 24 }, 1);
     uiBody->setTexture(g_resourceRepository.load("res/UI.png"));
-    uiBody->Redraw();
 
-    UIResizeableTexture* uiHeader = new UIResizeableTexture({ 242, 92, 24, 24 }, 1);
-    uiHeader->Name = "UIHeader";
-    uiHeader->transform.setAnchorPoints(0.0f, 0.0f, 1.0f, 0.0f, 3, 3, 21, 15);
-    uiBody->addChild(uiHeader);
+    uiWindow->addChild(uiBody);
+
+    UIHeader* uiHeader = new UIHeader("UIHeader");
     uiHeader->setTexture(g_resourceRepository.load("res/UI.png"));
+    uiBody->addChild(uiHeader);
     
     return true;
 }
@@ -117,7 +113,7 @@ void Game::handleEvents() {
             printf("Exiting game...\n");
             isQuitting = true;
         }
-        if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN) {
+        if(e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) {
             InputEvent ievent(e);
             for (auto& obj : sceneObjects) {
                 obj->HandleInput(ievent);

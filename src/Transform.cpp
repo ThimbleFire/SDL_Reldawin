@@ -49,7 +49,7 @@ void Transform::UpdateInAccordanceWithParent(Transform& parent) {
     
     size.set(
         static_cast<int>((right - left) * parent.size.x) - (pixel_left + pixel_right),
-        static_cast<int>((bottom - top) * parent.size.y) - (pixel_top - pixel_bottom)
+        static_cast<int>((bottom - top) * parent.size.y) - (pixel_top + pixel_bottom)
     );
 
     for (const auto& callback : positionChangeSubscribers) {

@@ -9,7 +9,8 @@
 For example a draggable rectangle, a clickable rectangle, a mouseover rectangle.*/
 class UIWindow : public SceneObject {
     public:
-        UIWindow() {
+        UIWindow(std::string Name) {
+            this->Name = Name;
             texture = g_resourceRepository.load("res/UI.png");
         }
         void Draw() const override {
