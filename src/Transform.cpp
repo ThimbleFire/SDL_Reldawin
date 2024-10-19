@@ -1,60 +1,70 @@
 #include "Transform.h"
 
-void Transform::SetPosition(int x, int y) {
-    position.x = x;
-    position.y = y;
-    for (const auto& callback : positionChangeSubscribers) {
-        callback(position);  // Pass the new position to the subscribers
-    }
-}
-
 void Transform::SetPosition(Vector2i newPosition) {
-    position = newPosition;
-    for (const auto& callback : positionChangeSubscribers) {
-        callback(position);  // Pass the new position to the subscribers
-    }
+    SetPosition(newPosition.x, newPosition.y);
 }
 
-void Transform::SetSize(int width, int height) {
-    size.x = width;
-    size.y = height;
-    for (const auto& callback : sizeChangeSubscribers) {
-        callback(size);  // Pass the new size to the subscribers
+void Transform::SetPosition(int x, int y) {
+    position.set(x, y);
+    for (const auto& callback : positionChangeSubscribers) {
+        callback();  // Notify subscribers, no parameters needed
     }
 }
 
 void Transform::SetSize(Vector2i newSize) {
-    size = newSize;
+    SetSize(newSize.x, newSize.y);
+}
+
+void Transform::SetSize(int width, int height) {
+    size.set(width, height);
     for (const auto& callback : sizeChangeSubscribers) {
-        callback(size);  // Pass the new size to the subscribers
+        callback();  // Notify subscribers, no parameters needed
     }
+}
+
+void Transform::Translate(Vector2i position) {
+    Translate(position.x, position.y);
 }
 
 void Transform::Translate(int x, int y) {
     position.x += x;
     position.y += y;
     for (const auto& callback : positionChangeSubscribers) {
-        callback(position);  // Pass the new position to the subscribers
-    }
-}
-
-void Transform::Translate(Vector2i position) {
-    this->position = this->position + position;
-    for (const auto& callback : positionChangeSubscribers) {
-        callback(position);  // Pass the new position to the subscribers
+        callback();  // Notify subscribers, no parameters needed
     }
 }
 
 void Transform::Translate(Vector2 position) {
     this->position = this->position + position;
+    for (const auto& callback : positionChangeSubscribers) {
+        callback();  // Notify subscribers, no parameters needed
+    }
 }
 
-void Transform::SubscribeToPositionChange(const std::function<void(const Vector2i&)>& callback) {
+void Transform::UpdateInAccordanceWithParent(Transform& parent) {
+    position.set(
+        static_cast<int>(parent.position.x + left * parent.size.x) + pixel_left,
+        static_cast<int>(parent.position.y + top * parent.size.y) + pixel_top
+    );
+    
+    size.set(
+        static_cast<int>((right - left) * parent.size.x) - (pixel_left + pixel_right),
+        static_cast<int>((bottom - top) * parent.size.y) - (pixel_top - pixel_bottom)
+    );
+
+    for (const auto& callback : positionChangeSubscribers) {
+        callback();
+    }
+    for (const auto& callback : sizeChangeSubscribers) {
+        callback();
+    }
+}
+
+void Transform::SubscribeToPositionChange(const std::function<void()>& callback) {
     positionChangeSubscribers.push_back(callback);
 }
 
-// Add a subscriber to the size change event
-void Transform::SubscribeToSizeChange(const std::function<void(const Vector2i&)>& callback) {
+void Transform::SubscribeToSizeChange(const std::function<void()>& callback) {
     sizeChangeSubscribers.push_back(callback);
 }
 

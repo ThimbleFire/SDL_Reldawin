@@ -16,3 +16,7 @@ So
         Add <?>
         Add a footer
             add a resize region
+
+uiWindow->addChild(uiBody);
+    uiBody subscribes to uiWindow transform changes
+

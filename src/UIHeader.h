@@ -5,7 +5,7 @@
 
 class Header : public UIElement {
 
-    Header(Transform& parentTransform) : UIElement(parentTransform)
+    Header()
     {
         
     }

@@ -5,7 +5,7 @@
 
 class UIButton : public UIElement {
     public:
-        UIButton(Transform& parentTransform) : UIElement(parentTransform) { }
+        UIButton() { }
         void HandleInput(InputEvent& event) override {
             if(event.handled) return;
             

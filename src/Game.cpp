@@ -82,16 +82,22 @@ bool Game::init() {
     sceneObjects.push_back(lbl_cell_clicked);
 
     uiWindow = new UIWindow();
+    uiWindow->Name = "UIWindow";
     uiWindow->transform.size.set(300, 350);
     sceneObjects.push_back(uiWindow);
 
-    UIResizeableTexture* uiBody = new UIResizeableTexture(uiWindow->transform, { 186, 92, 24, 24 }, 1, UIResizeableTexture::LayoutMode::ANCHOR);
-    uiBody->setAnchorPoints(0.0f, 0.0f, 1.0f, 1.0f, 0, 0, 0, 0);
-    uiWindow->AddElement(uiBody);
+    UIResizeableTexture* uiBody = new UIResizeableTexture({ 186, 92, 24, 24 }, 1);
+    uiBody->Name = "UIBody";
+    uiBody->transform.setAnchorPoints(0.0f, 0.0f, 1.0f, 1.0f, 0, 0, 0, 0);
+    uiWindow->addChild(uiBody);
+    uiBody->setTexture(g_resourceRepository.load("res/UI.png"));
+    uiBody->Redraw();
 
-    UIResizeableTexture* uiHeader = new UIResizeableTexture(uiWindow->transform, { 242, 92, 24, 24 }, 1, UIResizeableTexture::LayoutMode::ANCHOR);
-    uiHeader->setAnchorPoints(0.0f, 0.0f, 1.0f, 0.0f, 3, 3, 21, 15);
-    uiWindow->AddElement(uiHeader);
+    UIResizeableTexture* uiHeader = new UIResizeableTexture({ 242, 92, 24, 24 }, 1);
+    uiHeader->Name = "UIHeader";
+    uiHeader->transform.setAnchorPoints(0.0f, 0.0f, 1.0f, 0.0f, 3, 3, 21, 15);
+    uiBody->addChild(uiHeader);
+    uiHeader->setTexture(g_resourceRepository.load("res/UI.png"));
     
     return true;
 }

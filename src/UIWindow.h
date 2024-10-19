@@ -13,32 +13,28 @@ class UIWindow : public SceneObject {
             texture = g_resourceRepository.load("res/UI.png");
         }
         void Draw() const override {
-            for (auto& obj : elements) {
+            for (auto& obj : children) {
                 obj->Draw();
             }
         }
         void HandleInput(InputEvent& event) override {
-            for (auto& obj : elements) {
+            for (auto& obj : children) {
                 obj->HandleInput(event);
             }
         }
 
         void Update() override {
-            for (auto& obj : elements) {
+            for (auto& obj : children) {
                 obj->Update();
             }
         }
 
-        void AddElement(UIElement* element) {
-            element->setTexture(texture);
-            elements.push_back(element);
-        }
         void RemoveElement(int flag) {
 
         }
 
         void dispose() const override {
-            for (auto& obj : elements) {
+            for (auto& obj : children) {
                 obj->dispose();
                 delete obj;
             }
@@ -50,7 +46,6 @@ class UIWindow : public SceneObject {
 
     private:
         SDL_Texture* texture;
-        std::vector<UIElement*> elements;
 };
 
 #endif
