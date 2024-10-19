@@ -3,14 +3,16 @@
 
 #include "SceneObject.h"
 #include "ResourceRepository.h"
+#include "Event.h"
 #include <string>
 
 class UIElement : public SceneObject {
 
-    virtual void onHoverStart() {}
-    virtual void onHoverEnd() {}
-    virtual void onMouseDown() {}
-    virtual void onMouseUp() {}
+    public:
+        Event onMouseDown;
+        Event onMouseUp;
+        Event onMouseEnter;
+        Event onMouseLeave;
 
     public:
         void Draw() const override {
@@ -31,12 +33,12 @@ class UIElement : public SceneObject {
             {
                 if(event.event.type == SDL_MOUSEBUTTONDOWN) {
                     event.handled = true;
-                    onMouseDown(); 
+                    onMouseDown.invoke(); 
                     return;
                 }
                 else if(event.event.type == SDL_MOUSEBUTTONUP) {
-                    onMouseUp();
                     event.handled = true;
+                    onMouseUp.invoke();
                     return;
                 }
             }
@@ -45,13 +47,13 @@ class UIElement : public SceneObject {
             if (SDL_PointInRect(&point, &destRect)) {
                 if (!isMousedOver) {
                     isMousedOver = true;
-                    onHoverStart();
+                    onMouseEnter.invoke();
                 }
             } 
             else {
                 if (isMousedOver) {
                     isMousedOver = false;
-                    onHoverEnd();
+                    onMouseLeave.invoke();
                 }
             }
         }

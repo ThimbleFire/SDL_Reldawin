@@ -12,6 +12,11 @@ class UIResizeableTexture : public UIElement {
             this->Name = Name;
             CalculateSrc();
             Redraw();
+            
+            onMouseEnter.subscribe([this]() { onHoverStart(); });
+            onMouseLeave.subscribe([this]() { onHoverEnd(); });
+            onMouseDown.subscribe([this]() { onMousePressed(); });
+            onMouseUp.subscribe([this]() { onMouseReleased(); });
         }
         
         void Draw() const override {
@@ -54,28 +59,28 @@ class UIResizeableTexture : public UIElement {
             has_down = true;
         }
 
-        void onHoverStart() override {
+        void onHoverStart() {
             if (has_hover) {
                 srcRect = hover;
                 CalculateSrc();
             }
         }
 
-        void onHoverEnd() override {
+        void onHoverEnd() {
             if (has_hover) {
                 srcRect = normal;
                 CalculateSrc();
             }
         }
 
-        void onMouseDown() override {
+        void onMousePressed() {
             if (has_down) {
                 srcRect = mouse_down;
                 CalculateSrc();
             }
         }
 
-        void onMouseUp() override {
+        void onMouseReleased() {
             if (has_down && has_hover) {
                 srcRect = hover;  // Reset to hover on mouse up
                 CalculateSrc();

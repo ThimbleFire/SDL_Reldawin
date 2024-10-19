@@ -4,11 +4,17 @@
 #include "UIElement.h"
 
 class UITexture : public UIElement {
+
     public:
         UITexture(std::string Name, SDL_Rect rect) : srcNormal(rect) {
             srcRect = srcNormal;
             this->Name = Name;
             Redraw();
+
+            onMouseEnter.subscribe([this]() { onHoverStart(); });
+            onMouseLeave.subscribe([this]() { onHoverEnd(); });
+            onMouseDown.subscribe([this]() { onMousePressed(); });
+            onMouseUp.subscribe([this]() { onMouseReleased(); });
         }
 
         void Draw() const override {
@@ -29,25 +35,25 @@ class UITexture : public UIElement {
             has_down = true;
         }
 
-        void onHoverStart() override {
+        void onHoverStart() {
             if (has_hover) {
                 srcRect = srcHover;
             }
         }
 
-        void onHoverEnd() override {
+        void onHoverEnd() {
             if (has_hover) {
                 srcRect = srcNormal;
             }
         }
 
-        void onMouseDown() override {
+        void onMousePressed() {
             if (has_down) {
                 srcRect = srcPressed;
             }
         }
 
-        void onMouseUp() override {
+        void onMouseReleased() {
             if (has_down && has_hover) {
                 srcRect = srcHover;
             }
