@@ -14,9 +14,8 @@ class SceneObject : public Base {
         virtual void HandleInput(InputEvent& event) {}   
         // Redraw instructs the inheriting object to recalculate destRect
         virtual void Redraw() {
-            for (SceneObject* child : children) {
-                child->Redraw();
-            }
+
+
         }
         virtual void dispose() const {};
 
@@ -42,8 +41,10 @@ class SceneObject : public Base {
             });
 
             child->transform.UpdateInAccordanceWithParent(this->transform);
-            std::cerr << "["+ToString()+"] " + transform.size.ToString() << std::endl;
-            Redraw();
+
+            for (SceneObject* child : children) {
+                child->Redraw();
+            }
         }
 
         virtual ~SceneObject() {

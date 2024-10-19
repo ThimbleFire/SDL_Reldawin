@@ -7,18 +7,10 @@
 
 class UIElement : public SceneObject {
 
-    virtual void onHoverStart() { 
-        std::cerr << "hover start" << std::endl;
-    }
-    virtual void onHoverEnd() { 
-        std::cerr << "hover end" << std::endl;
-    }
-    virtual void onMouseDown() { 
-        std::cerr << "lmb down" << std::endl;
-    }
-    virtual void onMouseUp() { 
-        std::cerr << "lmb up" << std::endl;
-    }
+    virtual void onHoverStart() {}
+    virtual void onHoverEnd() {}
+    virtual void onMouseDown() {}
+    virtual void onMouseUp() {}
 
     public:
         void Draw() const override {
@@ -73,6 +65,32 @@ class UIElement : public SceneObject {
         }
         void setTexture(SDL_Texture* texture) {
             spritesheet = texture;
+        }
+
+        void Redraw() override {
+            destRect = calcDestRect(0, 0, transform.size.x, transform.size.y);
+        }
+
+    protected:
+        SDL_Rect calcDestRect(int x_offset, int y_offset, int width, int height) {
+            if(parent != nullptr)
+            {
+                return {
+                    transform.position.x + parent->transform.position.x + x_offset,
+                    transform.position.y + parent->transform.position.y + y_offset,
+                    width, 
+                    height
+                };
+            }
+            else
+            {
+                return {
+                    transform.position.x + x_offset,
+                    transform.position.y + y_offset,
+                    width,
+                    height
+                };
+            }
         }
 
     public:

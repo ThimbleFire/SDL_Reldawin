@@ -5,7 +5,9 @@
 
 class UIButton : public UIElement {
     public:
-        UIButton() { }
+        UIButton(std::string Name) {
+            this->Name = Name;
+        }
         void HandleInput(InputEvent& event) override {
             if(event.handled) return;
             

@@ -69,7 +69,7 @@ void Transform::SubscribeToSizeChange(const std::function<void()>& callback) {
 }
 
 std::string Transform::ToString() const {
-    return std::to_string(position.x) + ", " + std::to_string(position.y);
+    return std::to_string(position.x) + ", " + std::to_string(position.y) + ", " + std::to_string(size.x) + ", " + std::to_string(size.y);
 }
 
 SDL_Rect Transform::ToRect() {

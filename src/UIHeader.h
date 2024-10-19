@@ -3,7 +3,7 @@
 
 #include "UIElement.h"
 #include "UIResizeableTexture.h"
-#include <string>
+#include "UITexture.h"
 
 class UIHeader : public UIElement {
 
@@ -18,6 +18,16 @@ class UIHeader : public UIElement {
             uiHeaderTexture->SetHoverSrc({270, 92, 24, 24 });
             uiHeaderTexture->SetMouseDownSrc({214, 92, 24, 24 });
             this->addChild(uiHeaderTexture);
+
+            UITexture* uiButtonBackgroundTest = new UITexture("btnBackground", { 44, 44, 12, 12 });
+            uiButtonBackgroundTest->transform.setAnchorPoints(1.0f, 0.0f, 1.0f, 0.0f);
+            uiButtonBackgroundTest->transform.setAnchorPixels( -17, 3, 5, -15 );
+            uiButtonBackgroundTest->setTexture(g_resourceRepository.load("res/UI.png"));
+            uiButtonBackgroundTest->SetHoverSrc({30, 44, 12, 12 });
+            uiButtonBackgroundTest->SetMouseDownSrc({ 582, 427, 12, 12 });
+            this->addChild(uiButtonBackgroundTest);
+            
+            std::cerr << uiButtonBackgroundTest->transform.ToString() << std::endl;
         }
 
         void Draw() const override {

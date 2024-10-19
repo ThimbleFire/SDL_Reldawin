@@ -10,7 +10,7 @@ class UIResizeableTexture : public UIElement {
             : edgeBorder(edgeBorder), normal(rect) {
             srcRect = normal;
             this->Name = Name;
-            CalculateSrc();          
+            CalculateSrc();
             Redraw();
         }
         
@@ -29,14 +29,8 @@ class UIResizeableTexture : public UIElement {
                 obj->Draw();
             }
         }
-
-        void HandleInput(InputEvent& event) override {            
-            UIElement::HandleInput(event);
-        }
         
-        void Redraw() override {
-            std::cerr << "["+ ToString()+"] Redraw();" << std::endl;
-            
+        void Redraw() override {            
             dest_top_left   = calcDestRect(0, 0, edgeBorder, edgeBorder);
             dest_top        = calcDestRect(edgeBorder, 0, transform.size.x - edgeBorder * 2, edgeBorder);
             dest_top_right  = calcDestRect(transform.size.x - edgeBorder, 0, edgeBorder, edgeBorder);
@@ -46,8 +40,6 @@ class UIResizeableTexture : public UIElement {
             dest_bot_left   = calcDestRect(0, transform.size.y - edgeBorder, edgeBorder, edgeBorder);
             dest_bot        = calcDestRect(edgeBorder, transform.size.y - edgeBorder, transform.size.x - edgeBorder * 2, edgeBorder);
             dest_bot_right  = calcDestRect(transform.size.x - edgeBorder, transform.size.y - edgeBorder, edgeBorder, edgeBorder);
-
-            destRect = transform.ToRect();
         
             UIElement::Redraw();
         }
@@ -66,7 +58,6 @@ class UIResizeableTexture : public UIElement {
             if (has_hover) {
                 srcRect = hover;
                 CalculateSrc();
-                std::cerr << "hover start" << std::endl;
             }
         }
 
@@ -74,7 +65,6 @@ class UIResizeableTexture : public UIElement {
             if (has_hover) {
                 srcRect = normal;
                 CalculateSrc();
-                std::cerr << "hover end" << std::endl;
             }
         }
 
@@ -82,7 +72,6 @@ class UIResizeableTexture : public UIElement {
             if (has_down) {
                 srcRect = mouse_down;
                 CalculateSrc();
-                std::cerr << "lmb down" << std::endl;
             }
         }
 
@@ -90,7 +79,6 @@ class UIResizeableTexture : public UIElement {
             if (has_down && has_hover) {
                 srcRect = hover;  // Reset to hover on mouse up
                 CalculateSrc();
-                std::cerr << "lmb up" << std::endl;
             }
         }
 
@@ -124,28 +112,6 @@ class UIResizeableTexture : public UIElement {
         SDL_Rect dest_top_left, dest_top, dest_top_right;
         SDL_Rect dest_left, dest_mid, dest_right;
         SDL_Rect dest_bot_left, dest_bot, dest_bot_right;
-
-    private:
-        SDL_Rect calcDestRect(int x_offset, int y_offset, int width, int height) {
-            if(parent != nullptr)
-            {
-                return {
-                    transform.position.x + parent->transform.position.x + x_offset,
-                    transform.position.y + parent->transform.position.y + y_offset,
-                    width, 
-                    height
-                };
-            }
-            else
-            {
-                return {
-                    transform.position.x + x_offset,
-                    transform.position.y + y_offset,
-                    width,
-                    height
-                };
-            }
-        }
 };
 
 #endif
