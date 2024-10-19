@@ -94,6 +94,10 @@ bool Game::init() {
     UIHeader* uiHeader = new UIHeader("UIHeader");
     uiHeader->setTexture(g_resourceRepository.load("res/UI.png"));
     uiBody->addChild(uiHeader);
+
+    UIElement* button = dynamic_cast<UIElement*>(uiHeader->get_child(1));
+    button->onMouseDown.subscribe([this]() { uiWindow->visible = ! uiWindow->visible; });
+    // output: hello world
     
     return true;
 }
@@ -138,6 +142,11 @@ void Game::handleEvents() {
                 state[SDL_SCANCODE_S] ? 1 : state[SDL_SCANCODE_W] ? -1 : 0 
             );
             uiWindow->transform.Translate(inputVector * 10);
+
+            if (state[SDL_SCANCODE_I]) {
+                uiWindow->visible = ! uiWindow->visible;
+            }
+            
         }
     }
 }

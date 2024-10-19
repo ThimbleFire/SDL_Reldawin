@@ -9,6 +9,12 @@
 class SceneObject : public Base {
 
     public:
+        virtual ~SceneObject() {
+            for (SceneObject* child : children) {
+                delete child;  // Assuming ownership of children
+            }
+            children.clear();  // Clean the vector to avoid dangling pointers
+        }
         virtual void Draw() const = 0;
         virtual void Update() {}
         virtual void HandleInput(InputEvent& event) {}   
@@ -46,17 +52,16 @@ class SceneObject : public Base {
                 child->Redraw();
             }
         }
-
-        virtual ~SceneObject() {
-            for (SceneObject* child : children) {
-                delete child;  // Assuming ownership of children
-            }
-            children.clear();  // Clean the vector to avoid dangling pointers
+        
+        SceneObject* get_child(int i) {
+            return children.at(i);
         }
+
 
     public:
         Transform transform;
         SceneObject* parent = nullptr;
+    protected:
         std::vector<SceneObject*> children;
 };
 

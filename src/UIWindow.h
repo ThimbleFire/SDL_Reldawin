@@ -14,17 +14,20 @@ class UIWindow : public SceneObject {
             texture = g_resourceRepository.load("res/UI.png");
         }
         void Draw() const override {
+            if(!visible) return;
             for (auto& obj : children) {
                 obj->Draw();
             }
         }
         void HandleInput(InputEvent& event) override {
+            if(!visible) return;
             for (auto& obj : children) {
                 obj->HandleInput(event);
             }
         }
 
         void Update() override {
+            if(!visible) return;
             for (auto& obj : children) {
                 obj->Update();
             }
