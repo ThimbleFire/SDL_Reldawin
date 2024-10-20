@@ -22,13 +22,9 @@ class UIElement : public SceneObject {
             }
         }
 
-
-        bool isMousedOver = false;
-        bool mouseDownOverElement = false;
-        Vector2i offset; 
         void HandleInput(InputEvent& event) override {
-            if(event.handled) return;            
-            
+            if(event.handled) return;
+
             for (auto it = children.rbegin(); it != children.rend(); ++it) {
                 (*it)->HandleInput(event);
                 if (event.handled) 
@@ -38,49 +34,53 @@ class UIElement : public SceneObject {
             SDL_Point point = { event.screen.x, event.screen.y };
 
             // Check if mouse is over the element
-            if (SDL_PointInRect(&point, &destRect)) {
-                if (!isMousedOver) {
-                    event.handled = true;
+            if (SDL_PointInRect(&point, &destRect))
+            {
+                if (!isMousedOver)
+                {
+                    event.handled = doesHoverHandleEvent;
                     isMousedOver = true;
                     onMouseEnter.invoke();
+                    return;
                 }
-
                 // Mouse button down
-                if (event.event.type == SDL_MOUSEBUTTONDOWN) {
-                    event.handled = true;
+                if (event.event.type == SDL_MOUSEBUTTONDOWN)
+                {
+                    event.handled = doesClickHandleEvent;
                     onMouseDown.invoke();
                     mouseDownOverElement = true;
-
-                    // Calculate the initial offset between the mouse cursor and the transform position
                     offset = event.screen - (parent->transform.position*2);
                     return;
                 }
-            } 
-            else {
-                if (isMousedOver && !mouseDownOverElement) {
-                    event.handled = true;
+            }
+            else
+            {
+                if (isMousedOver && !mouseDownOverElement)
+                {
+                    event.handled = doesHoverHandleEvent;
                     isMousedOver = false;
                     onMouseLeave.invoke();
+                    return;
                 }
-            }
-
-            // Drag behavior
-            if (mouseDownOverElement && event.event.type == SDL_MOUSEMOTION) {
-                event.handled = true;
-
-                Vector2i newPosition = event.screen - offset;
-
-                onDrag.invoke(newPosition.x, newPosition.y);
-                return;
             }
 
             // Mouse button up
             if (mouseDownOverElement && event.event.type == SDL_MOUSEBUTTONUP) {
-                event.handled = true;
+                event.handled = doesClickHandleEvent;
                 onMouseUp.invoke();
                 mouseDownOverElement = false;
                 return;
             }
+
+            // Drag behavior
+            if (mouseDownOverElement && event.event.type == SDL_MOUSEMOTION)
+            {
+                event.handled = doesDragHandleEvent;
+                Vector2i newPosition = event.screen - offset;
+                onDrag.invoke(newPosition.x, newPosition.y);
+                return;
+            }
+
         }
 
         void dispose() const override
@@ -121,11 +121,19 @@ class UIElement : public SceneObject {
 
     public:
         int flag = -1;
+        bool doesHoverHandleEvent = false;
+        bool doesClickHandleEvent = true;
+        bool doesDragHandleEvent = false;
 
     protected:
         SDL_Texture* spritesheet;
         SDL_Rect srcRect;
         SDL_Rect destRect;
+
+    private:
+        bool isMousedOver = false;
+        bool mouseDownOverElement = false;
+        Vector2i offset; 
 };
 
 #endif

@@ -9,7 +9,7 @@ class TestWindow : public SceneObject {
     public:
         TestWindow()
         {
-            transform.size.set(300, 350);
+            transform.size.set(150, 250);
 
             UIResizeableTexture* uiBackground = new UIResizeableTexture("UIBody", { 186, 92, 24, 24 }, 1);
             uiBackground->setTexture(g_resourceRepository.load("res/UI.png"));
@@ -21,6 +21,7 @@ class TestWindow : public SceneObject {
             uiHeaderTexture->setTexture(g_resourceRepository.load("res/UI.png"));
             uiHeaderTexture->SetHoverSrc({270, 92, 24, 24 });
             uiHeaderTexture->SetMouseDownSrc({214, 92, 24, 24 });
+            uiHeaderTexture->doesDragHandleEvent = true;
             addChild(uiHeaderTexture);
 
             UITexture* uiButtonBackgroundTest = new UITexture("btnBackground", { 44, 44, 12, 12 });
@@ -29,7 +30,20 @@ class TestWindow : public SceneObject {
             uiButtonBackgroundTest->setTexture(g_resourceRepository.load("res/UI.png"));
             uiButtonBackgroundTest->SetHoverSrc({30, 44, 12, 12 });
             uiButtonBackgroundTest->SetMouseDownSrc({ 582, 427, 12, 12 });
+            uiButtonBackgroundTest->doesDragHandleEvent = true;
             addChild(uiButtonBackgroundTest);
+
+            UILabel* uiLabel = new UILabel("Debugger", "res/PIXEAB__.TTF");
+            uiLabel->transform.setAnchorPoints(0.5f, 0.0f, 0.0f, 0.0f);
+            uiLabel->transform.setAnchorPixels(-30, 2, 0, 0);
+            uiLabel->doesClickHandleEvent = false;
+            addChild(uiLabel);
+
+            UILabel* uiFramerate = new UILabel("FPS {0}", "res/PIXEAB__.TTF");
+            uiFramerate->transform.setAnchorPoints(0.0f, 0.0f, 0.0f, 0.0f);
+            uiFramerate->transform.setAnchorPixels(5, 16, 0, 0);
+            uiFramerate->doesClickHandleEvent = false;
+            addChild(uiFramerate);
 
             for (auto it = children.rbegin(); it != children.rend(); ++it) {
                 std::cerr << (*it)->Name << std::endl;
@@ -52,19 +66,6 @@ class TestWindow : public SceneObject {
             if(event.event.type == SDL_KEYDOWN)
             {
                 const Uint8* state = SDL_GetKeyboardState(NULL);
-                if(state[SDL_SCANCODE_E])
-                {
-                    std::random_device rd;
-                    std::mt19937 gen(rd());
-                    std::uniform_int_distribution<> dis(50, 500);
-                    transform.SetSize(dis(gen), dis(gen));
-                    return;
-                }
-                Vector2i inputVector(
-                    state[SDL_SCANCODE_A] ? -1 : state[SDL_SCANCODE_D] ? 1 : 0,
-                    state[SDL_SCANCODE_S] ? 1 : state[SDL_SCANCODE_W] ? -1 : 0 
-                );
-                transform.Translate(inputVector * 10);
                 if (state[SDL_SCANCODE_I]) {
                     visible = ! visible;
                 }

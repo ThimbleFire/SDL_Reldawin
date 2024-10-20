@@ -42,6 +42,7 @@ class Transform : public Base {
     public:
         Vector2i position;
         Vector2i size;
+        bool resizeWithParent = true;
 
     private:
         std::vector<std::function<void()>> positionChangeSubscribers;

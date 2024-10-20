@@ -129,5 +129,11 @@ void Game::calculateFramerate() {
         fps = frameCount; // Set FPS to frame count in that second
         frameCount = 0; // Reset frame count
         lastTime = currentTime; // Reset lastTime
+            
+        // write framerate to screen every second
+        UILabel* lbl_framerate = dynamic_cast<UILabel*>(sceneObjects.at(2)->get_child(4));
+        if (lbl_framerate) {
+            lbl_framerate->SetText("FPS: " + std::to_string(fps));
+        }
     }
 }
