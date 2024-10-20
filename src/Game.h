@@ -24,6 +24,9 @@ public:
     //temporary window
     void UpdateDebugger(int fps);
 
+    void CreateChunk(int x, int y);
+    void CreateStartChunks(int x, int y);
+
 public:
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;

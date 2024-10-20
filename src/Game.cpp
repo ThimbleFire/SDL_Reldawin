@@ -10,6 +10,8 @@ LocalPlayerCharacter* localPlayerCharacter = nullptr;
 UILabel* lbl_framerate = nullptr;
 UILabel* lbl_LPCPosition = nullptr;
 
+std::map<Vector2i, TileMap*> stuff;
+
 Game::Game() {
     
 }
@@ -51,11 +53,7 @@ bool Game::init() {
  
     camera.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    TileMap* tileMap = new TileMap();
-    sceneObjects.push_back(tileMap);
-    for(int y = 0; y < 8; y++)
-    for(int x = 0; x < 8; x++)
-        tileMap->SetTile(x, y, 0);
+    CreateStartChunks(1, 1);
 
     localPlayerCharacter = new LocalPlayerCharacter("res/sprite.png", Vector2i(50, 50));
     sceneObjects.push_back(localPlayerCharacter);
@@ -68,6 +66,22 @@ bool Game::init() {
     lbl_LPCPosition = dynamic_cast<UILabel*>(testWindow->get_child(5));
 
     return true;
+}
+
+void Game::CreateChunk(int w, int h) {
+    TileMap* tileMap = new TileMap();
+    for(int y = h * 16; y < (h + 1) * 16; y++)
+    for(int x = w * 16; x < (w + 1) * 16; x++)
+        tileMap->SetTile(x, y, 0);
+
+    stuff[Vector2i(w, h)] = tileMap;
+}
+
+void Game::CreateStartChunks(int w, int h) {
+    for(int x = w - 1; x < w + 2; x++) 
+    for(int y = h - 1; y < h + 2; y++) {
+        CreateChunk(x, y);
+    }
 }
 
 void Game::update() {
@@ -98,6 +112,10 @@ void Game::handleEvents() {
 void Game::render() {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
+
+    for(const auto& pair : stuff) {
+        pair.second->Draw();
+    }
 
     for (auto& obj : sceneObjects) {
         //if(!obj->visible) continue;
