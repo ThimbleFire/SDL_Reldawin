@@ -44,6 +44,14 @@ public:
         if (x == other.x && y < other.y) return true;
         return false;
     }
+    
+    Vector2i operator/(int scalar) const {
+        if (scalar != 0) {
+            return Vector2i(x / scalar, y / scalar);
+        }
+        // Handle division by zero as needed, e.g., throw an exception or return zero vector
+        return Vector2i(0, 0); // This can be modified to suit your error handling preference
+    }
 
     void set(int x, int y) {
         this->x = x;

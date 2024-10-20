@@ -38,7 +38,8 @@ class TestWindow : public SceneObject {
             uiButtonBackgroundTest->onMouseDown.subscribe([this]() { 
                visible = !visible; 
             });
-            uiHeaderTexture->onDrag.subscribe([this](int x, int y) { 
+            uiHeaderTexture->onDrag.subscribe([this](int x, int y) {
+                // it's unclear why but, yeah.
                transform.SetPosition(x/2, y/2);
             });
         }

@@ -13,7 +13,7 @@ class UIElement : public SceneObject {
         Event onMouseUp;
         Event onMouseEnter;
         Event onMouseLeave;
-        EventTurple onDrag; 
+        EventTurple onDrag;  // Define the onDrag event
 
     public:
         void Draw() const override {
@@ -22,13 +22,13 @@ class UIElement : public SceneObject {
             }
         }
 
+
         bool isMousedOver = false;
         bool mouseDownOverElement = false;
-        Vector2i offset;
-
+        Vector2i offset; 
         void HandleInput(InputEvent& event) override {
             if(event.handled) return;            
-
+            
             for (auto it = children.rbegin(); it != children.rend(); ++it) {
                 (*it)->HandleInput(event);
                 if (event.handled) 
@@ -37,6 +37,7 @@ class UIElement : public SceneObject {
 
             SDL_Point point = { event.screen.x, event.screen.y };
 
+            // Check if mouse is over the element
             if (SDL_PointInRect(&point, &destRect)) {
                 if (!isMousedOver) {
                     event.handled = true;
@@ -44,15 +45,18 @@ class UIElement : public SceneObject {
                     onMouseEnter.invoke();
                 }
 
+                // Mouse button down
                 if (event.event.type == SDL_MOUSEBUTTONDOWN) {
                     event.handled = true;
                     onMouseDown.invoke();
                     mouseDownOverElement = true;
 
-                    offset = event.screen - transform.position;
+                    // Calculate the initial offset between the mouse cursor and the transform position
+                    offset = event.screen - (parent->transform.position*2);
                     return;
                 }
-            } else {
+            } 
+            else {
                 if (isMousedOver && !mouseDownOverElement) {
                     event.handled = true;
                     isMousedOver = false;
@@ -60,6 +64,7 @@ class UIElement : public SceneObject {
                 }
             }
 
+            // Drag behavior
             if (mouseDownOverElement && event.event.type == SDL_MOUSEMOTION) {
                 event.handled = true;
 
@@ -69,6 +74,7 @@ class UIElement : public SceneObject {
                 return;
             }
 
+            // Mouse button up
             if (mouseDownOverElement && event.event.type == SDL_MOUSEBUTTONUP) {
                 event.handled = true;
                 onMouseUp.invoke();
