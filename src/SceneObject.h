@@ -18,21 +18,15 @@ class SceneObject : public Base {
         virtual void Draw() const = 0;
         virtual void Update() {}
         virtual void HandleInput(InputEvent& event) {}   
-        // Redraw instructs the inheriting object to recalculate destRect
-        virtual void Redraw() {
-
-
-        }
+        virtual void Redraw() {}
         virtual void dispose() const {};
 
         std::string ToString() const override {
             return Name;
         }
-
         void removeParent() {
             parent = nullptr;
         }
-
         void addChild(SceneObject* child) {
             child->parent = this;
             children.push_back(child);
@@ -52,15 +46,15 @@ class SceneObject : public Base {
                 child->Redraw();
             }
         }
-        
         SceneObject* get_child(int i) {
             return children.at(i);
         }
 
-
     public:
         Transform transform;
         SceneObject* parent = nullptr;
+        bool visible = true;
+
     protected:
         std::vector<SceneObject*> children;
 };

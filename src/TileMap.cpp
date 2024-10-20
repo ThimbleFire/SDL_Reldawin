@@ -40,7 +40,7 @@ void TileMap::Draw() const {
 }
 
 void TileMap::HandleInput(InputEvent& event) {
-    if(event.handled) return;
+    //if(event.handled) return;
 }
 
 void TileMap::dispose() const {

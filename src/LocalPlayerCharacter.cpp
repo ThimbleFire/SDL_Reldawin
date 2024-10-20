@@ -10,7 +10,7 @@ LocalPlayerCharacter::LocalPlayerCharacter(const std::string& imagePath, Vector2
 }
 
 void LocalPlayerCharacter::HandleInput(InputEvent& event) {
-    if(event.handled) return;
+    //if(event.handled) return;
         
     if (event.event.type == SDL_KEYDOWN)
     {
