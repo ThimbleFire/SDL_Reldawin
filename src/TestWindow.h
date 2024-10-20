@@ -45,11 +45,17 @@ class TestWindow : public SceneObject {
             uiFramerate->doesClickHandleEvent = false;
             addChild(uiFramerate);
 
+            UILabel* uiLPCPosition = new UILabel("LPC Position: {0}", "res/PIXEAB__.TTF");
+            uiLPCPosition->transform.setAnchorPoints(0.0f, 0.0f, 0.0f, 0.0f);
+            uiLPCPosition->transform.setAnchorPixels(5, 30, 0, 0);
+            uiLPCPosition->doesClickHandleEvent = false;
+            addChild(uiLPCPosition);
+
             for (auto it = children.rbegin(); it != children.rend(); ++it) {
                 std::cerr << (*it)->Name << std::endl;
             }
 
-            uiButtonBackgroundTest->onMouseDown.subscribe([this]() { 
+            uiButtonBackgroundTest->onMouseUp.subscribe([this]() { 
                visible = !visible; 
             });
             uiHeaderTexture->onDrag.subscribe([this](int x, int y) {

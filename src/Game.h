@@ -7,9 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "Camera.h"
-#include "ResourceRepository.h"
-#include "Label.h"
+#include "SceneObject.h"
 
 class Game {
 public:
@@ -23,17 +21,21 @@ public:
     void render();
     void update();
 
+    //temporary window
+    void UpdateDebugger(int fps);
 
 public:
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
     bool isQuitting = false;
 
+protected:
+    std::vector<SceneObject*> sceneObjects;
+
 private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_Texture* spriteTexture;
-
 
     Uint32 lastTime; // Last frame time
     Uint32 currentTime; // Current frame time

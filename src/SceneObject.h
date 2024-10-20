@@ -2,7 +2,6 @@
 #define _SCENEOBJECT_H_
 
 #include <iostream>
-#include <string>
 #include "Transform.h"
 #include "InputEvent.h"
 

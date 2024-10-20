@@ -2,13 +2,13 @@
 #include "LocalPlayerCharacter.h"
 #include "TileMap.h"
 #include "Math.h"
-#include "InputEvent.h"
 #include "UI.h"
 #include "TestWindow.h"
 
-SDL_Texture* spriteTexture;
-std::vector<SceneObject*> sceneObjects;
-LocalPlayerCharacter* localPlayerCharacter;
+SDL_Texture* spriteTexture = nullptr;
+LocalPlayerCharacter* localPlayerCharacter = nullptr;
+UILabel* lbl_framerate = nullptr;
+UILabel* lbl_LPCPosition = nullptr;
 
 Game::Game() {
     
@@ -62,6 +62,10 @@ bool Game::init() {
     
     TestWindow* testWindow = new TestWindow();
     sceneObjects.push_back(testWindow);
+
+    // debugging
+    lbl_framerate = dynamic_cast<UILabel*>(testWindow->get_child(4));
+    lbl_LPCPosition = dynamic_cast<UILabel*>(testWindow->get_child(5));
 
     return true;
 }
@@ -130,10 +134,11 @@ void Game::calculateFramerate() {
         frameCount = 0; // Reset frame count
         lastTime = currentTime; // Reset lastTime
             
-        // write framerate to screen every second
-        UILabel* lbl_framerate = dynamic_cast<UILabel*>(sceneObjects.at(2)->get_child(4));
-        if (lbl_framerate) {
-            lbl_framerate->SetText("FPS: " + std::to_string(fps));
-        }
+        UpdateDebugger(fps);
     }
+}
+
+void Game::UpdateDebugger(int fps) {
+    lbl_framerate->SetText("FPS: " + std::to_string(fps));    
+    lbl_LPCPosition->SetText("Position: " + localPlayerCharacter->transform.position.ToString());
 }
