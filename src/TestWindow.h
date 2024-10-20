@@ -39,7 +39,7 @@ class TestWindow : public SceneObject {
                visible = !visible; 
             });
             uiHeaderTexture->onDrag.subscribe([this](int x, int y) { 
-               transform.Translate(x, y);
+               transform.SetPosition(x/2, y/2);
             });
         }
 

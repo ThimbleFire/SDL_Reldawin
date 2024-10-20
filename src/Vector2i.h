@@ -3,6 +3,7 @@
 
 #include "Base.h"
 #include "Vector2.h"
+#include <cmath>  // For sqrt
 
 class Vector2i : public Base {
 public:
@@ -21,9 +22,17 @@ public:
     Vector2i operator-(const Vector2i& other) const {
         return Vector2i(x - other.x, y - other.y);
     }
+    
+    Vector2i operator-(const Vector2& other) const {
+        return Vector2i(x - static_cast<int>(other.x), y - static_cast<int>(other.y));
+    }
 
     Vector2i operator*(int scalar) const {
         return Vector2i(x * scalar, y * scalar);
+    }   
+
+    Vector2 ToVec2() const {
+        return Vector2(static_cast<float>(x), static_cast<float>(y));
     }
 
     std::string ToString() const override {
@@ -45,11 +54,19 @@ public:
         this->y = value.y;
     }
 
-    // parameter: unsigned char buffer[sizeof(int) * 2];
-    // void ToByteArray(unsigned char* buffer) const {
-    //     std::memcpy(buffer, &x, sizeof(x));       // Copy x to the buffer
-    //     std::memcpy(buffer + sizeof(x), &y, sizeof(y)); // Copy y to the buffer
-    // }
+    float distance_to(const Vector2i& other) const {
+        int dx = x - other.x;
+        int dy = y - other.y;
+        return std::sqrt(dx * dx + dy * dy);
+    }
+
+    Vector2 normalized() const {
+        float magnitude = std::sqrt(x * x + y * y);
+        if (magnitude == 0.0f) {
+            return Vector2(0.0f, 0.0f);
+        }
+        return Vector2(static_cast<float>(x) / magnitude, static_cast<float>(y) / magnitude);
+    }
 
     // Directional constants
     static const Vector2i UP;

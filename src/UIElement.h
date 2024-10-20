@@ -13,7 +13,7 @@ class UIElement : public SceneObject {
         Event onMouseUp;
         Event onMouseEnter;
         Event onMouseLeave;
-        EventTurple onDrag;  // Define the onDrag event
+        EventTurple onDrag; 
 
     public:
         void Draw() const override {
@@ -22,76 +22,60 @@ class UIElement : public SceneObject {
             }
         }
 
-
+        bool isMousedOver = false;
         bool mouseDownOverElement = false;
-        SDL_Point previousMousePos = {0, 0};  // Store the previous mouse position
+        Vector2i offset;
 
-        void HandleInput(InputEvent& event) override
-        {
-            if(event.handled) return;
+        void HandleInput(InputEvent& event) override {
+            if(event.handled) return;            
+
+            for (auto it = children.rbegin(); it != children.rend(); ++it) {
+                (*it)->HandleInput(event);
+                if (event.handled) 
+                    break;
+            }
 
             SDL_Point point = { event.screen.x, event.screen.y };
 
-            // Check if the mouse is over the element
             if (SDL_PointInRect(&point, &destRect)) {
-                // Fire onMouseEnter if not already moused over
                 if (!isMousedOver) {
                     event.handled = true;
                     isMousedOver = true;
                     onMouseEnter.invoke();
-                    std::cerr << ToString() + ":onMouseEnter" << std::endl;
                 }
 
-                // Check for mouse button down and fire onMouseDown
-                if(event.event.type == SDL_MOUSEBUTTONDOWN) {
+                if (event.event.type == SDL_MOUSEBUTTONDOWN) {
                     event.handled = true;
                     onMouseDown.invoke();
-                    mouseDownOverElement = true;  // Track that the mouse is pressed over this element
-                    previousMousePos = point;  // Initialize the drag tracking
-                    std::cerr << ToString() + ":onMouseDown" << std::endl;
+                    mouseDownOverElement = true;
+
+                    offset = event.screen - transform.position;
                     return;
                 }
-            } 
-            else {
-                // Fire onMouseLeave if not holding the mouse button down
+            } else {
                 if (isMousedOver && !mouseDownOverElement) {
                     event.handled = true;
                     isMousedOver = false;
                     onMouseLeave.invoke();
-                    std::cerr << ToString() + ":onMouseExit" << std::endl;
                 }
             }
 
-            // Handle dragging: mouse is down, and we are receiving mouse motion events
             if (mouseDownOverElement && event.event.type == SDL_MOUSEMOTION) {
                 event.handled = true;
-                SDL_Point delta = {
-                    point.x - previousMousePos.x,  // Calculate movement delta
-                    point.y - previousMousePos.y
-                };
-                previousMousePos = point;  // Update the previous position
 
-                onDrag.invoke(delta.x, delta.y);  // Fire the onDrag event with movement delta
+                Vector2i newPosition = event.screen - offset;
+
+                onDrag.invoke(newPosition.x, newPosition.y);
                 return;
             }
 
-            // Handle mouse button release
             if (mouseDownOverElement && event.event.type == SDL_MOUSEBUTTONUP) {
                 event.handled = true;
                 onMouseUp.invoke();
-                mouseDownOverElement = false;  // Reset the mouse button state on release
-                std::cerr << ToString() + ":onMouseUp" << std::endl;
+                mouseDownOverElement = false;
                 return;
             }
-
-            // Handle children last
-            for (auto& obj : children) {
-                obj->HandleInput(event);
-                if (event.handled) break;
-            }
         }
-
-
 
         void dispose() const override
         {
@@ -131,7 +115,6 @@ class UIElement : public SceneObject {
 
     public:
         int flag = -1;
-        bool isMousedOver = false;
 
     protected:
         SDL_Texture* spritesheet;

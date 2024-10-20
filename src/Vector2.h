@@ -17,8 +17,12 @@ public:
         return Vector2(x - other.x, y - other.y);
     }
 
-    Vector2 operator*(int scalar) const {
+    Vector2 operator*(float scalar) const {
         return Vector2(x * scalar, y * scalar);
+    }
+    
+    friend Vector2 operator*(float scalar, const Vector2& vec) {
+        return Vector2(vec.x * scalar, vec.y * scalar);
     }
 
     bool operator<(const Vector2& other) const {
