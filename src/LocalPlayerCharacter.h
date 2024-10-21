@@ -4,7 +4,12 @@
 #include "ResourceRepository.h"
 #include "TileMaster.h"
 #include "Math.h"
+#include "Event.h"
+
 class LocalPlayerCharacter : public SceneObject {
+    public:
+        Event onChunkChange;
+
     public:
         LocalPlayerCharacter(const std::string& imagePath, Vector2i initialPosition, TileMaster* tileMaster);
         ~LocalPlayerCharacter();
@@ -22,6 +27,7 @@ class LocalPlayerCharacter : public SceneObject {
         }
 
     private:
+        Vector2i last_chunk = Vector2i::ZERO;
         TileMaster* tileMaster;
         SDL_Texture* spriteTexture;
 };
