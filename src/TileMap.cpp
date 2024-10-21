@@ -11,11 +11,9 @@ TileMap::~TileMap() {
     g_resourceRepository.unload("res/tile.png");
 }
 
-void TileMap::SetTile(int x, int y, int8_t id) {
-    
-    tiles[Vector2i(x, y)] = { 192, 64, TILE_WIDTH, 32 };
+void TileMap::SetTile(int x, int y, int8_t id) {    
+    tiles[Vector2i(x, y)] = { 192, 64, TILE_WIDTH, TILE_HEIGHT };
 }
-
 
 void TileMap::Draw() const {
     for(const auto& pair : tiles) {
@@ -23,7 +21,7 @@ void TileMap::Draw() const {
         const Vector2i& cell = pair.first;
         SDL_Rect srcRect = pair.second;
         // translate tile position into world position
-        Vector2 world = Math::CellToWorld(cell);
+        Vector2i world = Math::CellToWorld(cell);
         // adjust position for camera position, I guess
         SDL_Rect destRect = { 
             transform.position.x + world.x,

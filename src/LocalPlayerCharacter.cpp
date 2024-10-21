@@ -4,10 +4,11 @@ LocalPlayerCharacter::~LocalPlayerCharacter() {
     g_resourceRepository.unload("res/sprite.png");
 }
 
-LocalPlayerCharacter::LocalPlayerCharacter(const std::string& imagePath, Vector2i initialPosition) 
-: Size(32, 32) {
-    transform.position = initialPosition;    
+LocalPlayerCharacter::LocalPlayerCharacter(const std::string& imagePath, Vector2i initialPosition, TileMaster* tileMaster) : tileMaster(tileMaster) {
+    transform.size.set(32, 32);
+    transform.position = initialPosition;
     spriteTexture = g_resourceRepository.load(imagePath);
+    tileMaster->CreateStartChunks(chunk_position());
     if (spriteTexture == nullptr) {
         printf("Failed to load texture!\n");
     }            
@@ -23,19 +24,15 @@ void LocalPlayerCharacter::HandleInput(InputEvent& event) {
             state[SDL_SCANCODE_A] ? -1 : state[SDL_SCANCODE_D] ? 1 : 0,
             state[SDL_SCANCODE_S] ? 1 : state[SDL_SCANCODE_W] ? -1 : 0 
         );
-        Vector2 dir = Math::ToIsometric(inputVector);
+        if(inputVector == Vector2i::ZERO) return;
+        Vector2i dir = Math::WorldToIsometricWorld(inputVector);
         transform.Translate(dir);
         event.handled = true;
     }
 }
 
 void LocalPlayerCharacter::Draw() const {
-    SDL_Rect destRect = { 
-        transform.position.x,
-        transform.position.y, 
-        Size.x, 
-        Size.y 
-    };
+    SDL_Rect destRect = transform.ToRect();
 
     // Adjust position based on the camera
     destRect.x -= camera.getCameraRect().x;

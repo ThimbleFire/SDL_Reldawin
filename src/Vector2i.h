@@ -29,7 +29,11 @@ public:
 
     Vector2i operator*(int scalar) const {
         return Vector2i(x * scalar, y * scalar);
-    }   
+    }
+
+    bool operator==(const Vector2i other) const {
+        return x == other.x && y == other.y;
+    }
 
     Vector2 ToVec2() const {
         return Vector2(static_cast<float>(x), static_cast<float>(y));

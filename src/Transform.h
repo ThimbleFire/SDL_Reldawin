@@ -39,7 +39,7 @@ class Transform : public Base {
 
         // Utility functions
         std::string ToString() const override;
-        SDL_Rect ToRect();
+        SDL_Rect ToRect() const;
 
     public:
         Vector2i position;

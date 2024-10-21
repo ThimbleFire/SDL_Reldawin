@@ -1,16 +1,15 @@
 #include "Game.h"
 #include "LocalPlayerCharacter.h"
-#include "TileMap.h"
 #include "Math.h"
 #include "UI.h"
 #include "TestWindow.h"
+#include "TileMaster.h"
 
 SDL_Texture* spriteTexture = nullptr;
 LocalPlayerCharacter* localPlayerCharacter = nullptr;
 UILabel* lbl_framerate = nullptr;
 UILabel* lbl_LPCPosition = nullptr;
-
-std::map<Vector2i, TileMap*> stuff;
+UILabel* lbl_LPCCell = nullptr;
 
 Game::Game() {
     
@@ -62,10 +61,16 @@ bool Game::init() {
  
     camera.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    CreateStartChunks(1, 1);
+    TileMaster* tileMaster = new TileMaster();
+    sceneObjects.push_back(tileMaster);
 
-    localPlayerCharacter = new LocalPlayerCharacter("res/sprite.png", Vector2i(50, 50));
+    localPlayerCharacter = new LocalPlayerCharacter("res/sprite.png", Vector2i(0, 0), tileMaster);
     sceneObjects.push_back(localPlayerCharacter);
+
+    localPlayerCharacter->transform.onPositionChanged.subscribe([this](){
+        lbl_LPCPosition->SetText("Position: " + localPlayerCharacter->transform.position.ToString());
+        lbl_LPCCell->SetText("Cell: " + localPlayerCharacter->cell_global().ToString());
+    });
     
     TestWindow* testWindow = new TestWindow();
     sceneObjects.push_back(testWindow);
@@ -73,24 +78,9 @@ bool Game::init() {
     // debugging
     lbl_framerate = dynamic_cast<UILabel*>(testWindow->get_child(4));
     lbl_LPCPosition = dynamic_cast<UILabel*>(testWindow->get_child(5));
+    lbl_LPCCell = dynamic_cast<UILabel*>(testWindow->get_child(6));
 
     return true;
-}
-
-void Game::CreateChunk(int w, int h) {
-    TileMap* tileMap = new TileMap();
-    for(int y = h * 16; y < (h + 1) * 16; y++)
-    for(int x = w * 16; x < (w + 1) * 16; x++)
-        tileMap->SetTile(x, y, 0);
-
-    stuff[Vector2i(w, h)] = tileMap;
-}
-
-void Game::CreateStartChunks(int w, int h) {
-    for(int x = w - 1; x < w + 2; x++) 
-    for(int y = h - 1; y < h + 2; y++) {
-        CreateChunk(x, y);
-    }
 }
 
 void Game::update() {
@@ -122,10 +112,6 @@ void Game::render() {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    for(const auto& pair : stuff) {
-        pair.second->Draw();
-    }
-
     for (auto& obj : sceneObjects) {
         //if(!obj->visible) continue;
         obj->Draw();
@@ -153,5 +139,4 @@ void Game::calculateFramerate() {
 
 void Game::UpdateDebugger(int fps) {
     lbl_framerate->SetText("FPS: " + std::to_string(fps));    
-    lbl_LPCPosition->SetText("Position: " + localPlayerCharacter->transform.position.ToString());
 }
