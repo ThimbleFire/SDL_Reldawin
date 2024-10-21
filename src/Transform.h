@@ -15,12 +15,13 @@ class Transform : public Base {
         Event onSizeChanged;
 
     public:
-        void SetPosition(int x, int y);
-        void SetPosition(Vector2i newPosition);
-        void SetSize(int width, int height);
-        void SetSize(Vector2i newSize);
-        void Translate(int x, int y);
-        void Translate(Vector2i position);
+        void SetPosition(float x, float y);
+        void SetPosition(Vector2 newPosition);
+        
+        void SetSize(float width, float height);
+        void SetSize(Vector2 newSize);
+
+        void Translate(float x, float y);
         void Translate(Vector2 position);
 
         void setAnchorPoints(float left, float top, float right, float bottom) {

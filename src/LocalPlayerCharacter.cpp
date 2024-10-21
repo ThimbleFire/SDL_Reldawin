@@ -5,7 +5,7 @@ LocalPlayerCharacter::~LocalPlayerCharacter() {
 }
 
 LocalPlayerCharacter::LocalPlayerCharacter(const std::string& imagePath, Vector2i spawnTile, TileMaster* tileMaster) : tileMaster(tileMaster) {
-    transform.size.set(32, 32);
+    transform.size.set(64, 32);
     transform.position = Math::CellToWorld(spawnTile);
     spriteTexture = g_resourceRepository.load(imagePath);
     tileMaster->CreateStartChunks(chunk_position());
@@ -20,12 +20,12 @@ void LocalPlayerCharacter::HandleInput(InputEvent& event) {
     if (event.event.type == SDL_KEYDOWN)
     {
         const Uint8* state = SDL_GetKeyboardState(NULL);
-        Vector2i inputVector(
-            state[SDL_SCANCODE_A] ? -1 : state[SDL_SCANCODE_D] ? 1 : 0,
-            state[SDL_SCANCODE_S] ? 1 : state[SDL_SCANCODE_W] ? -1 : 0 
+        Vector2 inputVector(
+            state[SDL_SCANCODE_A] ? -1.0f : state[SDL_SCANCODE_D] ? 1.0f : 0.0f,
+            state[SDL_SCANCODE_S] ? 1.0f : state[SDL_SCANCODE_W] ? -1.0f : 0.0f 
         );
-        if(inputVector == Vector2i::ZERO) return;
-        Vector2i dir = Math::WorldToIsometricWorld(inputVector);
+        if(inputVector == Vector2::ZERO) return;
+        Vector2 dir = Math::WorldToIsometricWorld(inputVector);
         transform.Translate(dir);
         event.handled = true;
     }

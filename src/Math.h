@@ -8,10 +8,10 @@
 class Math {
     public:
         //works
-        static Vector2i WorldToIsometricWorld(Vector2i world) {
-            int isoX = (world.x - world.y) * TILE_WIDTH_HALF;
-            int isoY = (world.x + world.y) * TILE_HEIGHT_HALF;
-            return Vector2i(isoX, isoY);
+        static Vector2 WorldToIsometricWorld(Vector2 world) {
+            float isoX = (world.x - world.y) * TILE_WIDTH_HALF;
+            float isoY = (world.x + world.y) * TILE_HEIGHT_HALF;
+            return Vector2(isoX, isoY);
         }
         static Vector2 CellToWorld(int x, int y) {
             return CellToWorld(Vector2i(x, y));
@@ -27,8 +27,6 @@ class Math {
             float w_y = world.y - TILE_HEIGHT_HALF;
             float x = (w_x / TILE_WIDTH_HALF + w_y / TILE_HEIGHT_HALF) / 2.0f;
             float y = (w_y / TILE_HEIGHT_HALF - w_x / TILE_WIDTH_HALF) / 2.0f;
-            x = std::floor(x - 0.5f);
-            y = std::floor(y + 0.5f);
             return Vector2i(x, y);
         }
 };

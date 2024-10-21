@@ -3,6 +3,8 @@
 
 #include "Base.h"
 #include <cmath>  // For sqrt
+#include <sstream>
+#include <iomanip> // For std::setprecision
 
 class Vector2 : public Base {
 public:
@@ -39,7 +41,9 @@ public:
 
     // Conversion to string for debugging purposes
     std::string ToString() const override {
-        return std::to_string(x) + ", " + std::to_string(y);
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(1) << x << ", " << y;
+        return ss.str();
     }
 
     // Less-than operator (for sorting or comparisons)
