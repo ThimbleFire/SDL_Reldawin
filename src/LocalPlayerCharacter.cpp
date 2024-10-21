@@ -24,10 +24,19 @@ void LocalPlayerCharacter::HandleInput(InputEvent& event) {
             state[SDL_SCANCODE_A] ? -1 : state[SDL_SCANCODE_D] ? 1 : 0,
             state[SDL_SCANCODE_S] ? 1 : state[SDL_SCANCODE_W] ? -1 : 0 
         );
-        if(inputVector == Vector2i::ZERO) return;
+        if(inputVector == Vector2i::ZERO) 
+            return;
+        
         Vector2 dir = Math::CellToWorld(inputVector);
         transform.Translate(dir);
         event.handled = true;
+        Vector2i new_chunk = chunk_position();
+        if(last_chunk == new_chunk)
+            return;
+        
+        onChunkChange.invoke();
+        tileMaster->onChunkChange(new_chunk, last_chunk);
+        last_chunk = new_chunk;
     }
 }
 
