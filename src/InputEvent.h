@@ -15,14 +15,13 @@ class InputEvent {
                 case SDL_MOUSEBUTTONUP:
                     screen = Vector2i(event.button.x, event.button.y);
                     world = camera.ScreenToWorld(event.button.x, event.button.y);
-                    cell = Math::WorldToCell(world.x, world.y);
                 break;
                 case SDL_MOUSEMOTION:
                     screen = Vector2i(event.motion.x, event.motion.y);
                     world = camera.ScreenToWorld(event.motion.x, event.motion.y);
-                    cell = Math::WorldToCell(world.x, world.y);
                 break;
-            }                    
+            }
+            cell = Math::WorldToCell(world.x, world.y);
         } 
     
     public:

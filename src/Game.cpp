@@ -10,6 +10,7 @@ LocalPlayerCharacter* localPlayerCharacter = nullptr;
 UILabel* lbl_framerate = nullptr;
 UILabel* lbl_LPCPosition = nullptr;
 UILabel* lbl_LPCCell = nullptr;
+UILabel* lbl_cursor_over_cell = nullptr;
 
 Game::Game() {
     
@@ -64,7 +65,7 @@ bool Game::init() {
     TileMaster* tileMaster = new TileMaster();
     sceneObjects.push_back(tileMaster);
 
-    localPlayerCharacter = new LocalPlayerCharacter("res/sprite.png", Vector2i(0, 0), tileMaster);
+    localPlayerCharacter = new LocalPlayerCharacter("res/sprite.png", Vector2i(24, 24), tileMaster);
     sceneObjects.push_back(localPlayerCharacter);
 
     localPlayerCharacter->transform.onPositionChanged.subscribe([this](){
@@ -79,6 +80,7 @@ bool Game::init() {
     lbl_framerate = dynamic_cast<UILabel*>(testWindow->get_child(4));
     lbl_LPCPosition = dynamic_cast<UILabel*>(testWindow->get_child(5));
     lbl_LPCCell = dynamic_cast<UILabel*>(testWindow->get_child(6));
+    lbl_cursor_over_cell = dynamic_cast<UILabel*>(testWindow->get_child(7));
 
     return true;
 }
@@ -105,6 +107,8 @@ void Game::handleEvents() {
             //if(!obj->visible) continue;
             obj->HandleInput(ievent);
         }
+
+        lbl_cursor_over_cell->SetText("Hovering Cell: " + ievent.cell.ToString());
     }
 }
 

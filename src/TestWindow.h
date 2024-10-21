@@ -51,11 +51,17 @@ class TestWindow : public SceneObject {
             uiLPCPosition->doesClickHandleEvent = false;
             addChild(uiLPCPosition);
 
-            UILabel* uiLPCCell = new UILabel("LPC Position: {0}", "res/PIXEAB__.TTF");
+            UILabel* uiLPCCell = new UILabel("LPC Cell: {0}", "res/PIXEAB__.TTF");
             uiLPCCell->transform.setAnchorPoints(0.0f, 0.0f, 0.0f, 0.0f);
             uiLPCCell->transform.setAnchorPixels(5, 44, 0, 0);
             uiLPCCell->doesClickHandleEvent = false;
             addChild(uiLPCCell);
+
+            UILabel* uiCursorOverCell = new UILabel("Cursor over cell: {0}", "res/PIXEAB__.TTF");
+            uiCursorOverCell->transform.setAnchorPoints(0.0f, 0.0f, 0.0f, 0.0f);
+            uiCursorOverCell->transform.setAnchorPixels(5, 58, 0, 0);
+            uiCursorOverCell->doesClickHandleEvent = false;
+            addChild(uiCursorOverCell);
 
             for (auto it = children.rbegin(); it != children.rend(); ++it) {
                 std::cerr << (*it)->Name << std::endl;

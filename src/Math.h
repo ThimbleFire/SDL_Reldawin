@@ -13,7 +13,6 @@ class Math {
             int isoY = (world.x + world.y) * TILE_HEIGHT_HALF;
             return Vector2i(isoX, isoY);
         }
-        
         static Vector2i CellToWorld(int x, int y) {
             return CellToWorld(Vector2i(x, y));
         }
@@ -25,11 +24,15 @@ class Math {
         static Vector2i WorldToCell(float x, float y) {
             return WorldToCell(Vector2i(x, y));
         }   
-        //works
         static Vector2i WorldToCell(Vector2i world) {
-            float cellX = (world.x / TILE_WIDTH + world.y / TILE_HEIGHT);
-            float cellY = (world.y / TILE_HEIGHT - (world.x / TILE_WIDTH));
-            return Vector2i(cellX, cellY);
+            Vector2 vec = world.ToVec2();
+            float w_x = vec.x - TILE_WIDTH_HALF;
+            float w_y = vec.y - TILE_HEIGHT_HALF;
+            float x = (w_x / TILE_WIDTH_HALF + w_y / TILE_HEIGHT_HALF) / 2.0f;
+            float y = (w_y / TILE_HEIGHT_HALF - w_x / TILE_WIDTH_HALF) / 2.0f;
+            x = std::floor(x - 0.5f);
+            y = std::floor(y + 0.5f);
+            return Vector2i(x, y);
         }
 };
 

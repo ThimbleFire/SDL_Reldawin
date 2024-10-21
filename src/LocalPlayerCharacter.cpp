@@ -4,9 +4,9 @@ LocalPlayerCharacter::~LocalPlayerCharacter() {
     g_resourceRepository.unload("res/sprite.png");
 }
 
-LocalPlayerCharacter::LocalPlayerCharacter(const std::string& imagePath, Vector2i initialPosition, TileMaster* tileMaster) : tileMaster(tileMaster) {
+LocalPlayerCharacter::LocalPlayerCharacter(const std::string& imagePath, Vector2i spawnTile, TileMaster* tileMaster) : tileMaster(tileMaster) {
     transform.size.set(32, 32);
-    transform.position = initialPosition;
+    transform.position = Math::CellToWorld(spawnTile);
     spriteTexture = g_resourceRepository.load(imagePath);
     tileMaster->CreateStartChunks(chunk_position());
     if (spriteTexture == nullptr) {
