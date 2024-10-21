@@ -18,7 +18,6 @@ class SceneObject : public Base {
         virtual void Update() {}
         virtual void HandleInput(InputEvent& event) {}   
         virtual void Redraw() {}
-        virtual void dispose() const {};
 
         std::string ToString() const override {
             return Name;
@@ -30,11 +29,11 @@ class SceneObject : public Base {
             child->parent = this;
             children.push_back(child);
             
-            this->transform.SubscribeToPositionChange([child, this]() {
+            this->transform.onPositionChanged.subscribe([child, this]() {
                 child->transform.UpdateInAccordanceWithParent(this->transform);
                 child->Redraw();
             });
-            this->transform.SubscribeToSizeChange([child, this]() {
+            this->transform.onSizeChanged.subscribe([child, this]() {
                 child->transform.UpdateInAccordanceWithParent(this->transform);
                 child->Redraw();
             });

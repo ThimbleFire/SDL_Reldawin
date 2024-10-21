@@ -6,12 +6,11 @@
 class LocalPlayerCharacter : public SceneObject {
     public:
         LocalPlayerCharacter(const std::string& imagePath, Vector2i initialPosition);
-        ~LocalPlayerCharacter() = default;
+        ~LocalPlayerCharacter();
 
         void Draw() const override;
         void HandleInput(InputEvent& event) override;
         void Update() override;
-        void dispose() const override;
 
     private:
         const Vector2i Size;  // Size of the character (32x48 pixels)

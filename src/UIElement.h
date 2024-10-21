@@ -3,7 +3,6 @@
 
 #include "SceneObject.h"
 #include "ResourceRepository.h"
-#include "Event.h"
 #include <string>
 
 class UIElement : public SceneObject {
@@ -16,6 +15,14 @@ class UIElement : public SceneObject {
         EventTurple onDrag;  // Define the onDrag event
 
     public:
+
+        ~UIElement() {
+            for (auto& obj : children) {
+                delete obj;
+                obj = nullptr;
+            }
+        }
+
         void Draw() const override {
             for (auto& obj : children) {
                 obj->Draw();
@@ -83,12 +90,6 @@ class UIElement : public SceneObject {
 
         }
 
-        void dispose() const override
-        {
-            for (auto& obj : children) {
-                obj->dispose();
-            }
-        }
         void setTexture(SDL_Texture* texture) {
             spritesheet = texture;
         }

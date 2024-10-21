@@ -17,7 +17,16 @@ Game::Game() {
 }
 
 Game::~Game() {
-    dispose();
+    SDL_DestroyTexture(spriteTexture);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    for (auto& obj : sceneObjects) {
+        delete obj;
+        obj = nullptr;
+    }
+    sceneObjects.clear();
+    IMG_Quit();
+    SDL_Quit();
 }
 
 bool Game::init() {
@@ -125,20 +134,6 @@ void Game::render() {
     SDL_RenderPresent(renderer);
 
     calculateFramerate();
-}
-
-void Game::dispose() {
-    SDL_DestroyTexture(spriteTexture);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    for (auto& obj : sceneObjects) {
-        obj->dispose();
-        obj = nullptr;
-    }
-    sceneObjects.clear();
-    g_resourceRepository.dispose();
-    IMG_Quit();
-    SDL_Quit();
 }
 
 void Game::calculateFramerate() {

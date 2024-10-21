@@ -7,8 +7,13 @@
 #include "Vector2.h"
 #include <SDL2/SDL_rect.h>
 #include <functional>
+#include "Event.h"
 
 class Transform : public Base {
+    public:
+        Event onPositionChanged;
+        Event onSizeChanged;
+
     public:
         void SetPosition(int x, int y);
         void SetPosition(Vector2i newPosition);
@@ -32,9 +37,6 @@ class Transform : public Base {
         }
         void UpdateInAccordanceWithParent(Transform& parent);
 
-        void SubscribeToPositionChange(const std::function<void()>& callback);
-        void SubscribeToSizeChange(const std::function<void()>& callback);
-
         // Utility functions
         std::string ToString() const override;
         SDL_Rect ToRect();
@@ -43,13 +45,6 @@ class Transform : public Base {
         Vector2i position;
         Vector2i size;
         bool resizeWithParent = true;
-
-    private:
-        std::vector<std::function<void()>> positionChangeSubscribers;
-        std::vector<std::function<void()>> sizeChangeSubscribers;
-        
-        void NotifyPositionChanged();
-        void NotifySizeChanged();
 
     private:
         float left = 0.0f, top = 0.0f, right = 1.0f, bottom = 1.0f;

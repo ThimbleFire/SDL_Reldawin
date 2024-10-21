@@ -14,7 +14,6 @@ int main(int argc, char* argv[]) {
         game.update();
         game.render();
     }
-
-    game.dispose();
+    
     return 0;
 }

@@ -6,9 +6,7 @@ void Transform::SetPosition(Vector2i newPosition) {
 
 void Transform::SetPosition(int x, int y) {
     position.set(x, y);
-    for (const auto& callback : positionChangeSubscribers) {
-        callback();  // Notify subscribers, no parameters needed
-    }
+    onPositionChanged.invoke();
 }
 
 void Transform::SetSize(Vector2i newSize) {
@@ -17,9 +15,7 @@ void Transform::SetSize(Vector2i newSize) {
 
 void Transform::SetSize(int width, int height) {
     size.set(width, height);
-    for (const auto& callback : sizeChangeSubscribers) {
-        callback();  // Notify subscribers, no parameters needed
-    }
+    onSizeChanged.invoke();
 }
 
 void Transform::Translate(Vector2i position) {
@@ -29,16 +25,12 @@ void Transform::Translate(Vector2i position) {
 void Transform::Translate(int x, int y) {
     position.x += x;
     position.y += y;
-    for (const auto& callback : positionChangeSubscribers) {
-        callback();  // Notify subscribers, no parameters needed
-    }
+    onPositionChanged.invoke();
 }
 
 void Transform::Translate(Vector2 position) {
     this->position = this->position + position;
-    for (const auto& callback : positionChangeSubscribers) {
-        callback();  // Notify subscribers, no parameters needed
-    }
+    onPositionChanged.invoke();
 }
 
 void Transform::UpdateInAccordanceWithParent(Transform& parent) {
@@ -52,22 +44,10 @@ void Transform::UpdateInAccordanceWithParent(Transform& parent) {
             static_cast<int>((right - left) * parent.size.x) - (pixel_left + pixel_right),
             static_cast<int>((bottom - top) * parent.size.y) - (pixel_top + pixel_bottom)
         );
-        for (const auto& callback : sizeChangeSubscribers) {
-            callback();
-        }
+        onSizeChanged.invoke();
     }
 
-    for (const auto& callback : positionChangeSubscribers) {
-        callback();
-    }
-}
-
-void Transform::SubscribeToPositionChange(const std::function<void()>& callback) {
-    positionChangeSubscribers.push_back(callback);
-}
-
-void Transform::SubscribeToSizeChange(const std::function<void()>& callback) {
-    sizeChangeSubscribers.push_back(callback);
+    onPositionChanged.invoke();
 }
 
 std::string Transform::ToString() const {

@@ -4,7 +4,11 @@
 ResourceRepository g_resourceRepository;
 
 ResourceRepository::~ResourceRepository() {
-    dispose();  // Clean up resources on destruction
+    // Iterate through all textures and destroy them
+    for (auto& pair : textures) {
+        SDL_DestroyTexture(pair.second.texture);  // Free each texture
+    }
+    textures.clear();  // Clear the map after cleaning up
 }
 
 void ResourceRepository::Initialize(SDL_Renderer* renderer) {
@@ -53,12 +57,4 @@ void ResourceRepository::unload(const std::string& path) {
     } else {
         std::cerr << "Warning: Tried to unload a texture that isn't loaded: " << path << std::endl;
     }
-}
-
-void ResourceRepository::dispose() {
-    // Iterate through all textures and destroy them
-    for (auto& pair : textures) {
-        SDL_DestroyTexture(pair.second.texture);  // Free each texture
-    }
-    textures.clear();  // Clear the map after cleaning up
 }

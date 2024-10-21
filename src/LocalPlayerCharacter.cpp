@@ -1,5 +1,9 @@
 #include "LocalPlayerCharacter.h"
 
+LocalPlayerCharacter::~LocalPlayerCharacter() {
+    g_resourceRepository.unload("res/sprite.png");
+}
+
 LocalPlayerCharacter::LocalPlayerCharacter(const std::string& imagePath, Vector2i initialPosition) 
 : Size(32, 32) {
     transform.position = initialPosition;    
@@ -43,8 +47,4 @@ void LocalPlayerCharacter::Draw() const {
 
 void LocalPlayerCharacter::Update() {
 
-}
-
-void LocalPlayerCharacter::dispose() const {
-    g_resourceRepository.unload("res/sprite.png");
 }

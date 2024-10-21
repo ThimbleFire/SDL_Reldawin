@@ -13,7 +13,6 @@ public:
     void Initialize(SDL_Renderer* renderer);
     SDL_Texture* load(const std::string& path);
     void unload(const std::string& path);  // Decrease reference count, unload if zero
-    void dispose();  // Unload all textures
     SDL_Renderer* renderer;
 
 private:

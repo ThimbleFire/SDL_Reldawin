@@ -16,18 +16,10 @@ class TileMap : public SceneObject {
 
     public:
         TileMap();
-        ~TileMap();
-
-        //void Initialize();        
-        //void CreateChunk();
-        //void ClearChunk();        
-        void SetTile(int x, int y, int8_t id);
-        //void EraseTile();
-        //void dispose();
-        
+        ~TileMap();  
+        void SetTile(int x, int y, int8_t id);        
         void Draw() const override;
         void HandleInput(InputEvent& event) override;
-        void dispose() const override;
     private:
         std::map<Vector2i, SDL_Rect> tiles;
 

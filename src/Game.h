@@ -15,7 +15,6 @@ public:
     ~Game();
     
     bool init();
-    void dispose();
 
     void handleEvents();
     void render();

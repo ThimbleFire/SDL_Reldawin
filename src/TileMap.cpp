@@ -8,7 +8,7 @@ TileMap::TileMap() {
 }
 
 TileMap::~TileMap() {
-
+    g_resourceRepository.unload("res/tile.png");
 }
 
 void TileMap::SetTile(int x, int y, int8_t id) {
@@ -41,8 +41,4 @@ void TileMap::Draw() const {
 
 void TileMap::HandleInput(InputEvent& event) {
     //if(event.handled) return;
-}
-
-void TileMap::dispose() const {
-    g_resourceRepository.unload("res/tile.png");
 }
