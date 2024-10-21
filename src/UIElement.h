@@ -12,7 +12,7 @@ class UIElement : public SceneObject {
         Event onMouseUp;
         Event onMouseEnter;
         Event onMouseLeave;
-        EventTurple onDrag;  // Define the onDrag event
+        EventTurple onDrag;
 
     public:
 

@@ -22,16 +22,14 @@ void TileMap::Draw() const {
         SDL_Rect srcRect = pair.second;
         // translate tile position into world position
         Vector2 world = Math::CellToWorld(cell);
+        SDL_FRect cameraRect = camera.ToRect();
         // adjust position for camera position, I guess
         SDL_FRect destRect = { 
-            transform.position.x + world.x,
-            transform.position.y + world.y, 
+            transform.position.x + world.x - cameraRect.x,
+            transform.position.y + world.y - cameraRect.y, 
             TILE_WIDTH,
             TILE_HEIGHT 
         };
-        // Adjust position based on the camera
-        destRect.x -= camera.getCameraRect().x;
-        destRect.y -= camera.getCameraRect().y;
         // render the tile
         SDL_RenderCopyF(g_resourceRepository.renderer, tile_texture, &srcRect, &destRect);
     }

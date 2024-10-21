@@ -7,21 +7,15 @@
 class Camera : public Transform {
 public:
     Camera() {}
-    SDL_Rect getCameraRect() const;
-    void setSize(int width, int height) {
-        this->width = width;
-        this->height = height;
+    void setSize(float width, float height) {
+        size.set(width, height);
     }
     Vector2 ScreenToWorld(int x, int y) {
         return Vector2(x + position.x, y + position.y);
     }
     void setPosition(Vector2 position) {
-        this->position = position - Vector2(width / 2, height / 2);
+        this->position = position - size / 2;
     }
-
-private:
-    int width;       // Width of the camera viewport
-    int height;      // Height of the camera viewport
 };
 
 extern Camera camera;
