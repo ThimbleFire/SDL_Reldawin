@@ -21,7 +21,7 @@ void TileMap::Draw() const {
         const Vector2i& cell = pair.first;
         SDL_Rect srcRect = pair.second;
         // translate tile position into world position
-        Vector2i world = Math::CellToWorld(cell);
+        Vector2 world = Math::CellToWorld(cell);
         // adjust position for camera position, I guess
         SDL_Rect destRect = { 
             transform.position.x + world.x,

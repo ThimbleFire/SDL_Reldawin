@@ -54,6 +54,6 @@ std::string Transform::ToString() const {
     return std::to_string(position.x) + ", " + std::to_string(position.y) + ", " + std::to_string(size.x) + ", " + std::to_string(size.y);
 }
 
-SDL_Rect Transform::ToRect() const {
+SDL_FRect Transform::ToRect() const {
     return { position.x, position.y, size.x, size.y };
 }

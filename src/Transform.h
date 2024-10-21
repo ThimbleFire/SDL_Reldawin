@@ -39,11 +39,11 @@ class Transform : public Base {
 
         // Utility functions
         std::string ToString() const override;
-        SDL_Rect ToRect() const;
+        SDL_FRect ToRect() const;
 
     public:
-        Vector2i position;
-        Vector2i size;
+        Vector2 position;
+        Vector2 size;
         bool resizeWithParent = true;
 
     private:

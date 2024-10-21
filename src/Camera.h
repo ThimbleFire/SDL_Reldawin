@@ -15,8 +15,8 @@ public:
     Vector2 ScreenToWorld(int x, int y) {
         return Vector2(x + position.x, y + position.y);
     }
-    void setPosition(Vector2i position) {
-        this->position = position - Vector2i(width / 2, height / 2);
+    void setPosition(Vector2 position) {
+        this->position = position - Vector2(width / 2, height / 2);
     }
 
 private:

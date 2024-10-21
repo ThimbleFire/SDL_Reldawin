@@ -32,14 +32,14 @@ void LocalPlayerCharacter::HandleInput(InputEvent& event) {
 }
 
 void LocalPlayerCharacter::Draw() const {
-    SDL_Rect destRect = transform.ToRect();
+    SDL_FRect destRect = transform.ToRect();
 
     // Adjust position based on the camera
     destRect.x -= camera.getCameraRect().x;
     destRect.y -= camera.getCameraRect().y;
 
     // Render the sprite
-    SDL_RenderCopy(g_resourceRepository.renderer, spriteTexture, nullptr, &destRect);
+    SDL_RenderCopyF(g_resourceRepository.renderer, spriteTexture, nullptr, &destRect);
 }
 
 void LocalPlayerCharacter::Update() {
