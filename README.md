@@ -1,19 +1,9 @@
 Todo
 
-Each UIElement should have its own list of children
-this way buttons can be independently responsible for
-declaring their own UIResizeableTexture.
+to do
 
-We'll need to think about how that might impact the event system though.
+* use ttf_sizetext to get string with you center text alignment
 
-So
+* intro cinematic of a gypsy doing a palm reading. specifically a close up of the hand being touched. a textbox reads questions that the player answers as if the player were speaking for the gypsy. "now let's see, where did you originate? Picklebury, of course", then this option would change character properties in some way.
 
-    Create a UIWindow
-    Add a body
-        Add a header
-            Add a label (title)
-            Add a close button
-        Add <?>
-        Add a footer
-            add a resize region
-
+* soft slow piano music plays at the player enters the game world. trees sway with the autumn breeze. the animations are crisp and satisfying.
