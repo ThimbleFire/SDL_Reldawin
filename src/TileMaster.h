@@ -34,6 +34,8 @@ class TileMaster : public SceneObject {
             stuff[old_chunk]->tiles.clear();
             stuff[new_chunk] = stuff[old_chunk];
             stuff.erase(old_chunk);
+            stuff[new_chunk].CreateChunk(new_chunk.x, new_chunk.y);
+            std::cerr << "replaced " old_chunk.ToString() + " with " + new_chunk.ToString() << std::endl;
         }
 
         void Draw() const override {
