@@ -22,11 +22,24 @@ class TileMaster : public SceneObject {
 
         void onChunkChange(Vector2i new_chunk, Vector2i last_chunk) {
             var directionOfTravel = new_chunk - last_chunk;
-            for(int i = -1; i < 2; i++) {
-                Vector2i offset_index = Vector2i(directionOfTravel.x == 0 ? i : directionOfTravel.x, directionOfTravel.y == 0 ? i : directionOfTravel.y);
-                Vector2i create_index = new_chunk + offset_index;
-                Vector2i remove_index = old_chunk - offset_index;
-                replaceChunk(remove_index, create_index);
+            if (isOrthogonalDirection(directionOfTravel)) {
+                for(int i = -1; i < 2; i++) {
+                    Vector2i offset_index = Vector2i(directionOfTravel.x == 0 ? i : directionOfTravel.x, directionOfTravel.y == 0 ? i : directionOfTravel.y);
+                    Vector2i create_index = new_chunk + offset_index;
+                    Vector2i remove_index = last_chunk - offset_index;
+                    replaceChunk(remove_index, create_index);
+                }
+            }
+            else if (isDiagonalDirection(directionOfTravel)) {
+                for(int i = 0; i < 3; i++) {
+                    Vector2i offset_index = Vector2i(directionOfTravel.x == 1 ? -i : i, directionOfTravel.y == 1 ? -i : i);
+                    Vector2i remove_indexX = (last_chunk - directionOfTravel) - Vector2i(offset_index.x, 0);
+                    Vector2i remove_indexY = (last_chunk - directionOfTravel) - Vector2i(0, offset_index.y);
+                    Vector2i create_indexX = new_chunk + directionOfTravel + Vector2i(offset_index.x, 0);
+                    Vector2i create_indexY = new_chunk + directionOfTravel + Vector2i(0, offset_index.y);
+                    replaceChunk(remove_indexX, create_indexY);
+                    replaceChunk(remove_indexY, create_indexY);
+                }
             }
         }
 
