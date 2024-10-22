@@ -23,14 +23,13 @@ void LocalPlayerCharacter::HandleInput(InputEvent& event) {
         );
         if(inputVector == Vector2i::ZERO) 
             return;
-        
         Vector2 dir = Math::CellToWorld(inputVector);
         transform.Translate(dir);
         event.handled = true;
         Vector2i new_chunk = chunk_position();
+        
         if(last_chunk == new_chunk)
             return;
-        
         onChunkChange.invoke();
         tileMaster->onChunkChange(new_chunk, last_chunk);
         last_chunk = new_chunk;
