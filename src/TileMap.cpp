@@ -1,6 +1,12 @@
 #include "TileMap.h"
 #include "Math.h"
 
+// Headers for loading a .csv file containing map data
+// #include <iostream>
+// #include <fstream>
+// #include <sstream>
+// #include <vector>
+
 SDL_Texture* tile_texture;
 
 TileMap::TileMap() {
@@ -16,6 +22,33 @@ void TileMap::CreateChunk(int w, int h) {
     for(int x = w * 16; x < (w + 1) * 16; x++)
         SetTile(x, y, 0);
 }
+
+// Method for loading .csv map data
+// void TileMap::CreateChunk(int w, int h) {
+//     // Construct the file name based on the chunk coordinates
+//     std::string filename = "chunk_" + std::to_string(w) + "_" + std::to_string(h) + ".csv";
+//     std::ifstream file(filename);
+//     if (!file.is_open()) {
+//         std::cerr << "Error opening file: " << filename << std::endl;
+//         return;
+//     }
+//     std::string line;
+//     int tileY = h * 16; // Start Y position for the chunk
+//     // Reading each line from the file (each line represents a row of tiles)
+//     while (std::getline(file, line)) {
+//         std::stringstream lineStream(line);
+//         std::string cell;
+//         int tileX = w * 16; // Start X position for the chunk
+//         // Split line by commas (representing tile IDs in the row)
+//         while (std::getline(lineStream, cell, ',')) {
+//             int id = std::stoi(cell);  // Convert the string to a tile ID (int)
+//             SetTile(tileX, tileY, id); // Set the tile at the current position
+//             tileX++; // Move to the next tile in the row
+//         }
+//         tileY++; // Move to the next row
+//     }
+//     file.close();
+// }
 
 void TileMap::SetTile(int x, int y, int8_t id) {    
     tiles[Vector2i(x, y)] = { 192, 64, TILE_WIDTH, TILE_HEIGHT };
