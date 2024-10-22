@@ -16,7 +16,8 @@ class TileMap : public SceneObject {
 
     public:
         TileMap();
-        ~TileMap();  
+        ~TileMap();
+        void CreateChunk(int w, int h);
         void SetTile(int x, int y, int8_t id);        
         void Draw() const override;
         void HandleInput(InputEvent& event) override;
