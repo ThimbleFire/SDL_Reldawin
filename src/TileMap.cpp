@@ -60,9 +60,12 @@ void TileMap::Draw() const {
         Vector2 world = Math::CellToWorld(cell);
         SDL_FRect cameraRect = camera.ToRect();
         // adjust position for camera position, I guess
-        SDL_FRect destRect = { 
-            transform.position.x + world.x - cameraRect.x,
-            transform.position.y + world.y - cameraRect.y, 
+        SDL_FRect destRect = {
+            transform.position.x + // transform.position should be be { 0, 0 }
+            world.x - // world offset will be the location of the tile, ie (cell.x * chunk.x) to world space
+            TILE_WIDTH_HALF - // tile is offset because otherwise { 0, 0 } is the topleft of the rectangle
+            cameraRect.x,// then offset the rectangle by the cameraRect so we're rendering what's on camera
+            transform.position.y + world.y - TILE_HEIGHT_HALF - cameraRect.y, 
             TILE_WIDTH,
             TILE_HEIGHT 
         };
