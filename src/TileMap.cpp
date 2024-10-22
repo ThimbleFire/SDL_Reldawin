@@ -11,6 +11,12 @@ TileMap::~TileMap() {
     g_resourceRepository.unload("res/tile.png");
 }
 
+void TileMap::CreateChunk(int w, int h) {
+    for(int y = h * 16; y < (h + 1) * 16; y++)
+    for(int x = w * 16; x < (w + 1) * 16; x++)
+        SetTile(x, y, 0);
+}
+
 void TileMap::SetTile(int x, int y, int8_t id) {    
     tiles[Vector2i(x, y)] = { 192, 64, TILE_WIDTH, TILE_HEIGHT };
 }
