@@ -8,10 +8,7 @@ LocalPlayerCharacter::LocalPlayerCharacter(const std::string& imagePath, Vector2
     transform.size.set(64, 32);
     transform.position = Math::CellToWorld(spawnTile);
     spriteTexture = g_resourceRepository.load(imagePath);
-    tileMaster->CreateStartChunks(chunk_position());
-    if (spriteTexture == nullptr) {
-        printf("Failed to load texture!\n");
-    }            
+    tileMaster->CreateStartChunks(chunk_position());          
 }
 
 void LocalPlayerCharacter::HandleInput(InputEvent& event) {
