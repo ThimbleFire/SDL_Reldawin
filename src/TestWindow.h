@@ -1,8 +1,8 @@
 #ifndef _TESTWINDOW_H_
 #define _TESTWINDOW_H_
 
-#include "SceneObject.h"
-#include "UI.h"
+#include "Engine/SceneObject.h"
+#include "Engine/UI.h"
 #include <random>
 
 class TestWindow : public SceneObject {

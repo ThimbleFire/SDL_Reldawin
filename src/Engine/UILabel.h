@@ -16,8 +16,6 @@ class UILabel : public UIElement {
         ~UILabel() {
             SDL_DestroyTexture(texture);
             TTF_CloseFont(font);
-            delete font;
-            font = nullptr;
         }
 
         void Draw() const override {
