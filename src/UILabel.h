@@ -16,6 +16,8 @@ class UILabel : public UIElement {
         ~UILabel() {
             SDL_DestroyTexture(texture);
             TTF_CloseFont(font);
+            delete font;
+            font = nullptr;
         }
 
         void Draw() const override {
@@ -36,6 +38,8 @@ class UILabel : public UIElement {
             CreateTexture();
             Redraw();
         }
+    public:
+        TTF_Font* font = nullptr;
 
     private:
         void CreateTexture() {
@@ -51,7 +55,6 @@ class UILabel : public UIElement {
     private:
         std::string text;
         std::string fontPath;
-        TTF_Font* font = nullptr;
         SDL_Texture* texture = nullptr;
         SDL_Color color = { 255, 255, 255, 200 };
 };

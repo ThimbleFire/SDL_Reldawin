@@ -4,11 +4,10 @@
 #include "ResourceRepository.h"
 #include "TileMaster.h"
 #include "Math.h"
-#include "Event.h"
 
 class LocalPlayerCharacter : public SceneObject {
     public:
-        Event onChunkChange;
+        //Event onChunkChange;
 
     public:
         LocalPlayerCharacter(const std::string& imagePath, Vector2i initialPosition, TileMaster* tileMaster);

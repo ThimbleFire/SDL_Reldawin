@@ -23,6 +23,10 @@ public:
         return Vector2i(x - other.x, y - other.y);
     }
     
+    Vector2i operator-() const {
+        return Vector2i(-x, -y);
+    }
+    
     Vector2i operator-(const Vector2& other) const {
         return Vector2i(x - static_cast<int>(other.x), y - static_cast<int>(other.y));
     }

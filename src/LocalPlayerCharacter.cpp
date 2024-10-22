@@ -7,8 +7,9 @@ LocalPlayerCharacter::~LocalPlayerCharacter() {
 LocalPlayerCharacter::LocalPlayerCharacter(const std::string& imagePath, Vector2i spawnTile, TileMaster* tileMaster) : tileMaster(tileMaster) {
     transform.size.set(64, 32);
     transform.position = Math::CellToWorld(spawnTile);
+    last_chunk = chunk_position();
     spriteTexture = g_resourceRepository.load(imagePath);
-    tileMaster->CreateStartChunks(chunk_position());          
+    tileMaster->CreateStartChunks(chunk_position());
 }
 
 void LocalPlayerCharacter::HandleInput(InputEvent& event) {
@@ -30,7 +31,7 @@ void LocalPlayerCharacter::HandleInput(InputEvent& event) {
         
         if(last_chunk == new_chunk)
             return;
-        onChunkChange.invoke();
+        //onChunkChange.invoke();
         tileMaster->onChunkChange(new_chunk, last_chunk);
         last_chunk = new_chunk;
     }

@@ -21,6 +21,9 @@ class TileMap : public SceneObject {
         void SetTile(int x, int y, int8_t id);        
         void Draw() const override;
         void HandleInput(InputEvent& event) override;
+        void clear() {
+            tiles.clear();
+        }
     private:
         std::map<Vector2i, SDL_Rect> tiles;
 
