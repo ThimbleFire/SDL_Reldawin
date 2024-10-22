@@ -11,19 +11,12 @@ class TileMaster : public SceneObject {
         TileMaster() {}
         ~TileMaster() {}
 
-        void CreateChunk(int w, int h) {
-            TileMap* tileMap = new TileMap();
-            for(int y = h * 16; y < (h + 1) * 16; y++)
-            for(int x = w * 16; x < (w + 1) * 16; x++)
-                tileMap->SetTile(x, y, 0);
-
-            stuff[Vector2i(w, h)] = tileMap;
-        }
-
         void CreateStartChunks(Vector2i chunk_position) {
             for(int x = chunk_position.x - 1; x < chunk_position.x + 2; x++) 
             for(int y = chunk_position.y - 1; y < chunk_position.y + 2; y++) {
-                CreateChunk(x, y);
+                TileMap* tileMap = new TileMap();
+                stuff[Vector2i(x, y)] = tileMap;
+                stuff[Vector2i(x, y)].CreateChunk(x, y);
             }
         }
 
@@ -35,6 +28,12 @@ class TileMaster : public SceneObject {
                 Vector2i remove_index = old_chunk - offset_index;
                 replaceChunk(remove_index, create_index);
             }
+        }
+
+        void replaceChunk(Vector2i old_chunk, Vector2i new_chunk) {
+            stuff[old_chunk]->tiles.clear();
+            stuff[new_chunk] = stuff[old_chunk];
+            stuff.erase(old_chunk);
         }
 
         void Draw() const override {
