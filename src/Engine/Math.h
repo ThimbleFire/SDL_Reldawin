@@ -22,6 +22,12 @@ class Math {
             float y = (world.y / TILE_HEIGHT_HALF - world.x / TILE_WIDTH_HALF) / 2.0f;
             return Vector2i(x, y);
         }
+        static float radiansToDegrees(float radians) {
+            return radians * (180.0 / M_PI);
+        }
+
+    public:
+        const double M_PI = 3.14159265358979323846;
 };
 
 #endif
