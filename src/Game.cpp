@@ -17,7 +17,7 @@ bool Game::init() {
         return false;
     }
 
-    TileMaster* tileMaster = new TileMaster();
+    TileMaster* tileMaster = new TileMaster("res/tiles.png");
     sceneObjects.push_back(tileMaster);
     
     TestWindow* testWindow = new TestWindow();
