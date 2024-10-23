@@ -17,6 +17,10 @@ TileMap::~TileMap() {
     g_resourceRepository.unload("res/tile.png");
 }
 
+void TileMap::CreateChunk(int w, int h, SDL_Texture* texture) {
+    this->tile_texture = texture;
+    CreateChunk(w, h);
+}
 // Method for loading .csv map data
 void TileMap::CreateChunk(int w, int h) {
     // Construct the file name based on the chunk coordinates
