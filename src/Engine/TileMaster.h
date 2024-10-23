@@ -6,11 +6,12 @@
 #include <map>
 
 class TileMaster : public SceneObject {
+    SDL_Texture* texture;
 
     public:
         std::map<Vector2i, TileMap*> stuff;
 
-        TileMaster() {}
+        TileMaster(const std::string& path);
         ~TileMaster() {}
 
         void CreateStartChunks(Vector2i chunk_position) {
@@ -18,7 +19,7 @@ class TileMaster : public SceneObject {
             for(int y = chunk_position.y - 1; y < chunk_position.y + 2; y++) {
                 TileMap* tileMap = new TileMap();
                 stuff[Vector2i(x, y)] = tileMap;
-                stuff[Vector2i(x, y)]->CreateChunk(x, y);
+                stuff[Vector2i(x, y)]->CreateChunk(x, y, texture);
             }
         }
 
