@@ -18,6 +18,7 @@ class TileMap : public SceneObject {
         TileMap();
         ~TileMap();
         void CreateChunk(int w, int h);
+        void CreateChunk(int w, int h, SDL_Texture* texture);
         void SetTile(int x, int y, int8_t id);        
         void Draw() const override;
         void HandleInput(InputEvent& event) override;
