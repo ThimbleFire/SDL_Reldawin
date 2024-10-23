@@ -9,13 +9,8 @@
 
 SDL_Texture* tile_texture;
 
-TileMap::TileMap() {
-    tile_texture = g_resourceRepository.load("res/tile.png");
-}
-
-TileMap::~TileMap() {
-    g_resourceRepository.unload("res/tile.png");
-}
+TileMap::TileMap() {}
+TileMap::~TileMap() {}
 
 void TileMap::CreateChunk(int w, int h, SDL_Texture* texture) {
     this->tile_texture = texture;
