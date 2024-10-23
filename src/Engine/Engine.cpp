@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Math.h"
 #include "UI.h"
+#include "Pathfinding.h"
 #include "TileMaster.h"
 
 Engine::Engine() {
@@ -44,6 +45,7 @@ bool Engine::init() {
 
     g_resourceRepository.Initialize(renderer);
     
+
     // Initialize SDL_ttf
     if (TTF_Init() == -1) {
         printf("SDL_ttf could not initialize! TTF_Error: %s\n", SDL_GetError());

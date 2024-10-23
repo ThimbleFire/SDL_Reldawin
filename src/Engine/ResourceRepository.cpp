@@ -1,6 +1,5 @@
 #include "ResourceRepository.h"
 
-// Define the global instance
 ResourceRepository g_resourceRepository;
 
 ResourceRepository::~ResourceRepository() {

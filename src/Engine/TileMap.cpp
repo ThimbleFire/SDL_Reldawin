@@ -19,6 +19,7 @@ void TileMap::CreateChunk(int w, int h) {
     // Construct the file name based on the chunk coordinates
     std::string filename = "chunk_" + std::to_string(w) + "_" + std::to_string(h) + ".csv";
     std::ifstream file(filename);
+    
     if (!file.is_open()) {
         std::cerr << "Error opening file: " << filename << ". Loading NULL chunk." << std::endl;    
         for(int y = h * 16; y < (h + 1) * 16; y++)
@@ -45,7 +46,9 @@ void TileMap::CreateChunk(int w, int h) {
 }
 
 void TileMap::SetTile(int x, int y, int8_t id) {    
-    tiles[Vector2i(x, y)] = { 192, 64, TILE_WIDTH, TILE_HEIGHT };
+    Vector2i cell = Vector2i(x, y);
+    bool walkable = id == 0;
+    tiles[cell] = { 192, 64, TILE_WIDTH, TILE_HEIGHT };
 }
 
 void TileMap::Draw() const {

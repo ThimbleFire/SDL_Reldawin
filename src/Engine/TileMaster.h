@@ -3,13 +3,13 @@
 
 #include "SceneObject.h"
 #include "TileMap.h"
+#include "Pathfinding.h"
 #include <map>
 
 class TileMaster : public SceneObject {
     SDL_Texture* texture;
 
     public:
-        std::map<Vector2i, TileMap*> stuff;
 
         TileMaster(const std::string& path) {
             texture = g_resourceRepository.load(path);
@@ -26,6 +26,8 @@ class TileMaster : public SceneObject {
                 stuff[Vector2i(x, y)]->CreateChunk(x, y, texture);
             }
         }
+        
+        std::map<Vector2i, TileMap*> stuff;
 
         void onChunkChange(Vector2i new_chunk, Vector2i old_chunk) {
             Vector2i directionOfTravel = new_chunk - old_chunk;
@@ -51,6 +53,8 @@ class TileMaster : public SceneObject {
                         replaceChunk(remove_indexY, create_indexY);
                 }
             }
+
+            g_pathfinder.populate(stuff);
         }
 
         void replaceChunk(Vector2i old_chunk, Vector2i new_chunk) {

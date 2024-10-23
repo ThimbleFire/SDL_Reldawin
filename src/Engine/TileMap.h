@@ -10,11 +10,6 @@
 class TileMap : public SceneObject {
 
     public:
-        enum TileType {
-            VOID
-        };
-
-    public:
         TileMap();
         ~TileMap();
         void CreateChunk(int w, int h);
