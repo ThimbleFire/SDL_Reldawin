@@ -11,7 +11,9 @@ class TileMaster : public SceneObject {
     public:
         std::map<Vector2i, TileMap*> stuff;
 
-        TileMaster(const std::string& path);
+        TileMaster(const std::string& path) {
+            g_resourceRepository.load(path);
+        }   
         ~TileMaster() {}
 
         void CreateStartChunks(Vector2i chunk_position) {
