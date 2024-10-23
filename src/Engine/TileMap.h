@@ -26,6 +26,7 @@ class TileMap : public SceneObject {
             tiles.clear();
         }
     private:
+        SDL_Texture* tile_texture;
         std::map<Vector2i, SDL_Rect> tiles;
 
 };

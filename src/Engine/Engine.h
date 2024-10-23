@@ -26,10 +26,10 @@ public:
 public:
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
+    bool isQuitting = false;
 
 protected:
     std::vector<SceneObject*> sceneObjects;
-    bool isQuitting = false;
     float fps; // Store FPS
 
 private:

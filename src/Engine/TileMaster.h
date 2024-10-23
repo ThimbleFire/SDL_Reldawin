@@ -12,9 +12,11 @@ class TileMaster : public SceneObject {
         std::map<Vector2i, TileMap*> stuff;
 
         TileMaster(const std::string& path) {
-            g_resourceRepository.load(path);
+            texture = g_resourceRepository.load(path);
         }   
-        ~TileMaster() {}
+        ~TileMaster() {
+            SDL_DestroyTexture(texture);
+        }
 
         void CreateStartChunks(Vector2i chunk_position) {
             for(int x = chunk_position.x - 1; x < chunk_position.x + 2; x++) 

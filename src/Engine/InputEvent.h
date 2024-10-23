@@ -12,6 +12,8 @@ class InputEvent {
             switch(event.type)
             {
                 case SDL_MOUSEBUTTONDOWN:
+                    screen = Vector2i(event.button.x, event.button.y);
+                    world = camera.ScreenToWorld(event.button.x, event.button.y);
                 case SDL_MOUSEBUTTONUP:
                     screen = Vector2i(event.button.x, event.button.y);
                     world = camera.ScreenToWorld(event.button.x, event.button.y);
@@ -19,9 +21,10 @@ class InputEvent {
                 case SDL_MOUSEMOTION:
                     screen = Vector2i(event.motion.x, event.motion.y);
                     world = camera.ScreenToWorld(event.motion.x, event.motion.y);
+                    std::cerr << world.ToString() << std::endl;
                 break;
             }
-            cell = Math::WorldToCell(world.x, world.y);
+            cell = Math::WorldToCell(world.x - TILE_WIDTH_HALF, world.y - TILE_HEIGHT_HALF);
         } 
     
     public:

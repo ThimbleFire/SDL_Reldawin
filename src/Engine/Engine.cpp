@@ -8,7 +8,6 @@ Engine::Engine() {
 }
 
 Engine::~Engine() {
-    SDL_DestroyTexture(spriteTexture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     for (auto& obj : sceneObjects) {

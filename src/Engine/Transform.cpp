@@ -20,7 +20,6 @@ void Transform::SetSize(float width, float height) {
 
 void Transform::Translate(Vector2 position) {
     Translate(position.x, position.y);
-    onPositionChanged.invoke();
 }
 
 void Transform::Translate(float x, float y) {

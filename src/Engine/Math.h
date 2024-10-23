@@ -18,16 +18,19 @@ class Math {
             return WorldToCell(Vector2(x, y));
         }   
         static Vector2i WorldToCell(Vector2 world) {
-            float x = (world.x / TILE_WIDTH_HALF + world.y / TILE_HEIGHT_HALF) / 2.0f;
-            float y = (world.y / TILE_HEIGHT_HALF - world.x / TILE_WIDTH_HALF) / 2.0f;
+            float W_x = world.x;
+            float W_y = world.y;
+
+            float x = (W_x / TILE_WIDTH_HALF + W_y / TILE_HEIGHT_HALF) / 2.0;
+            float y = (W_y / TILE_HEIGHT_HALF - W_x / TILE_WIDTH_HALF) / 2.0;
+
+            x = floor(x + 0.5);
+            y = floor(y + 0.5);
             return Vector2i(x, y);
         }
         static float radiansToDegrees(float radians) {
-            return radians * (180.0 / M_PI);
+            return radians * (180.0 / 3.14159265358979323846);
         }
-
-    public:
-        const double M_PI = 3.14159265358979323846;
 };
 
 #endif
