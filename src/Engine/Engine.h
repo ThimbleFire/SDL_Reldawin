@@ -18,7 +18,7 @@ public:
 
     void handleEvents();
     void render();
-    void update();
+    void update(float delta);
 
     //temporary window
     void UpdateDebugger(int fps);

@@ -15,7 +15,7 @@ class SceneObject : public Base {
             children.clear();  // Clean the vector to avoid dangling pointers
         }
         virtual void Draw() const = 0;
-        virtual void Update() {}
+        virtual void Update(float delta) {}
         virtual void HandleInput(InputEvent& event) {}   
         virtual void Redraw() {}
 

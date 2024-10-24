@@ -1,5 +1,5 @@
 const int MAP_SIZE = 4096;
-const float CHUNK_SIZE = 16;
+const int CHUNK_SIZE = 16;
 
 const int TILE_HEIGHT = 32;
 const int TILE_WIDTH = 64;

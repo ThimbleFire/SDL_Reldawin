@@ -10,7 +10,8 @@
 class TileMap : public SceneObject {
     public:
         struct Node {
-            Vector2i position;
+            Vector2i cell;
+            Vector2 position;
             Node* parent = nullptr;
             int GCost;
             int HCost;
@@ -18,13 +19,16 @@ class TileMap : public SceneObject {
                 return GCost + HCost; 
             }
         
-            Node(Vector2i pos) : 
+            Node() {}
+            Node(Vector2i cell, Vector2 pos) :
+                cell(cell), 
                 position(pos), 
                 GCost(0), 
                 HCost(0) {
                 
                 }
         };
+        
     public:
         TileMap();
         ~TileMap();
@@ -37,9 +41,12 @@ class TileMap : public SceneObject {
             tiles.clear();
             nodes.clear();
         }
+
     private:
         SDL_Texture* tile_texture;
         std::map<Vector2i, SDL_Rect> tiles;
+
+    public:
         std::map<Vector2i, Node> nodes;
 
 };

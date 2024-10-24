@@ -21,7 +21,6 @@ class InputEvent {
                 case SDL_MOUSEMOTION:
                     screen = Vector2i(event.motion.x, event.motion.y);
                     world = camera.ScreenToWorld(event.motion.x, event.motion.y);
-                    std::cerr << world.ToString() << std::endl;
                 break;
             }
             cell = Math::WorldToCell(world.x - TILE_WIDTH_HALF, world.y - TILE_HEIGHT_HALF);

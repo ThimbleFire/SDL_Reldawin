@@ -1,7 +1,6 @@
 #include "Engine.h"
 #include "Math.h"
 #include "UI.h"
-#include "Pathfinding.h"
 #include "TileMaster.h"
 
 Engine::Engine() {
@@ -57,10 +56,10 @@ bool Engine::init() {
     return true;
 }
 
-void Engine::update() {
+void Engine::update(float delta) {
     for (auto& obj : sceneObjects) {
         //if(!obj->visible) continue;
-        obj->Update();
+        obj->Update(delta);
     }
 }
 
@@ -75,7 +74,10 @@ void Engine::handleEvents() {
 
         InputEvent ievent(e);
         for (auto& obj : sceneObjects) {
-            //if(!obj->visible) continue;
+            if(ievent.handled)
+                return;
+            if(!obj->visible) 
+                continue;
             obj->HandleInput(ievent);
         }
     }

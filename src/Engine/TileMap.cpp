@@ -48,8 +48,8 @@ void TileMap::CreateChunk(int w, int h) {
 void TileMap::SetTile(int x, int y, int8_t id) {    
     Vector2i cell = Vector2i(x, y);
     bool walkable = id == 0;
-    tiles[cell] = { 192, 64, TILE_WIDTH, TILE_HEIGHT };
-    nodes[cell] = Node(cell);
+    tiles[cell] = { 128, 64, TILE_WIDTH, TILE_HEIGHT };
+    nodes.emplace(cell, TileMap::Node(cell, Math::CellToWorld(cell)));
 }
 
 void TileMap::Draw() const {

@@ -65,7 +65,7 @@ public:
     }
 
     // Distance calculation between two vectors
-    float distance_to(const Vector2& other) const {
+    float distance_to(Vector2 other) const {
         float dx = x - other.x;
         float dy = y - other.y;
         return std::sqrt(dx * dx + dy * dy);

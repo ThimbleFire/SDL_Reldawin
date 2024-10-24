@@ -15,7 +15,7 @@ class LocalPlayerCharacter : public SceneObject {
 
         void Draw() const override;
         void HandleInput(InputEvent& event) override;
-        void Update() override;
+        void Update(float delta) override;
 
         Vector2i cell_global() const {
             return Math::WorldToCell(transform.position);
@@ -26,6 +26,7 @@ class LocalPlayerCharacter : public SceneObject {
         }
 
     private:
+        std::vector<Vector2> chain;
         Vector2i last_chunk = Vector2i::ZERO;
         TileMaster* tileMaster;
         SDL_Texture* spriteTexture;

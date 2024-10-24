@@ -14,7 +14,11 @@ LocalPlayerCharacter::LocalPlayerCharacter(const std::string& imagePath, Vector2
 
 void LocalPlayerCharacter::HandleInput(InputEvent& event) {
     //if(event.handled) return;
-        
+                    
+    if (event.event.type == SDL_MOUSEBUTTONDOWN) {
+        chain = tileMaster->getPath(cell_global(), event.cell);
+    }
+
     if (event.event.type == SDL_KEYDOWN)
     {
         const Uint8* state = SDL_GetKeyboardState(NULL);
@@ -48,6 +52,21 @@ void LocalPlayerCharacter::Draw() const {
     SDL_RenderCopyF(g_resourceRepository.renderer, spriteTexture, nullptr, &destRect);
 }
 
-void LocalPlayerCharacter::Update() {
+void LocalPlayerCharacter::Update(float delta) {
 
+    if (chain.size() <= 0)
+        return;
+
+    if (transform.position.distance_to(chain[0]) < 1.0f) {
+        chain.erase(chain.begin());
+    }
+
+    transform.moveTowards(chain[0], delta * 100.0f);
+    Vector2i new_chunk = chunk_position();
+    
+    if(last_chunk == new_chunk)
+        return;
+        
+    tileMaster->onChunkChange(new_chunk, last_chunk);
+    last_chunk = new_chunk;
 }

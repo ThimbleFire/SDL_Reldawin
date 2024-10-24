@@ -13,6 +13,7 @@ class TestWindow : public SceneObject {
 
             UIResizeableTexture* uiBackground = new UIResizeableTexture("UIBody", { 186, 92, 24, 24 }, 1);
             uiBackground->setTexture(g_resourceRepository.load("res/UI.png"));
+            uiBackground->doesHoverHandleEvent = true;
             addChild(uiBackground);
 
             UIResizeableTexture* uiHeaderTexture = new UIResizeableTexture("UIHeaderTexture", { 242, 92, 24, 24 }, 1);

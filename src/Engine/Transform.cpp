@@ -1,4 +1,5 @@
 #include "Transform.h"
+#include "Math.h"
 
 void Transform::SetPosition(Vector2 newPosition) {
     SetPosition(newPosition.x, newPosition.y);
@@ -20,6 +21,11 @@ void Transform::SetSize(float width, float height) {
 
 void Transform::Translate(Vector2 position) {
     Translate(position.x, position.y);
+}
+
+void Transform::moveTowards(Vector2 target, float delta) {
+    Vector2 dir = (target-position).normalized();
+    Translate(dir * delta);
 }
 
 void Transform::Translate(float x, float y) {

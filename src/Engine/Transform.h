@@ -24,6 +24,8 @@ class Transform : public Base {
         void Translate(float x, float y);
         void Translate(Vector2 position);
 
+        void moveTowards(Vector2 target, float delta);
+
         void setAnchorPoints(float left, float top, float right, float bottom) {
             this->left = left;
             this->top = top;
