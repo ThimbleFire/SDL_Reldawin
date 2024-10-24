@@ -42,8 +42,8 @@ class Pathfinding {
         }
     }
 
-    void initialize(const std::unordered_map<Vector2i, TileMap*>& tileMaps) {
-        for (const auto& tileMapPair : tileMaps) {
+    void initialize(const std::unordered_map<Vector2i, TileMap*> tileMaps) {
+        for (const auto tileMapPair : tileMaps) {
             TileMap* tileMap = tileMapPair.second;
             for (int y = 0; y < CHUNK_SIZE; y++) {
                 for (int x = 0; x < CHUNK_SIZE; x++) {
