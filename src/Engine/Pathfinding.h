@@ -21,13 +21,21 @@ class Pathfinding {
         
             Node(Vector2i pos, Node* parentNode) : position(pos), parent(parentNode), GCost(0), HCost(0) {}
         };
+        struct Vector2iComparator {
+            bool operator()(const Vector2i& a, const Vector2i& b) const {
+                if (a.x != b.x) return a.x < b.x; // Sort by x first
+                return a.y < b.y;                 // Then sort by y
+            }
+        };
     public:
-        Pathfinding(TileMaster* tMaster) : tileMaster(tMaster);
-        ~Pathfinding();
-        void GetPath();
+        void populate(std::map<Vector2i, TileMap*, Vector2iComparator> tileMaps) {
+            for (auto& tileMap : tileMaps) {
+                //
+            }
+        }
 
     public:
-        TileMaster* tileMaster;
+        static std::map<Vector2i, Node*> nodes;
 };
 
 extern Pathfinding g_pathfinder;
