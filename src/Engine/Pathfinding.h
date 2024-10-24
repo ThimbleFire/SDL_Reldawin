@@ -20,39 +20,42 @@ class Pathfinding {
                 return tileMap->index * CHUNK_SIZE + position_local;
             }
             
-            Node* parent;
-            int GCost; // Cost from start to this node
-            int HCost; // Heuristic cost to end
+            Node* parent = nullptr;
+            int GCost;
+            int HCost;
             int FCost() const { 
                 return GCost + HCost; 
             }
         
-            Node(TileMap* tileMap, Vector2i pos, Node* parentNode) : 
+            Node(TileMap* tileMap, Vector2i pos) : 
                 tileMap(tileMap),
                 position_local(pos), 
-                parent(parentNode), 
                 GCost(0), 
                 HCost(0) {
                 
                 }
         };
     public:
+    ~Pathfinding() {
+        for (auto& pair : nodes) {
+            delete pair.second;
+        }
+    }
 
     void initialize(const std::unordered_map<Vector2i, TileMap*>& tileMaps) {
         for (const auto& tileMapPair : tileMaps) {
             TileMap* tileMap = tileMapPair.second;
             for (int y = 0; y < CHUNK_SIZE; y++) {
                 for (int x = 0; x < CHUNK_SIZE; x++) {
-                    Vector2i localPosition = Vector2i(x, y);
+                    Vector2i localPosition(x, y);
                     nodes[tileMap.index + localPosition] = new Node(tileMap, localPosition, nullptr);
                 }
             }
-            
         }
     }
 
     public:
-        static std::unsorted_map<Vector2i, Node*> nodes;
+        static std::unordered_map<Vector2i, Node*> nodes;
 };
 
 extern Pathfinding g_pathfinder;
