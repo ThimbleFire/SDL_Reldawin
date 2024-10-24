@@ -3,7 +3,12 @@
 
 #include "SceneObject.h"
 #include "TileMap.h"
+
 #include <map>
+#include <queue>
+#include <unordered_set>
+#include <limits>
+#include <algorithm>
 
 class TileMaster : public SceneObject {
     SDL_Texture* texture;
