@@ -79,7 +79,7 @@ class TileMaster : public SceneObject {
         int heuristic(const Vector2& a, const Vector2& b) {
             int dx = std::abs(a.x - b.x);
             int dy = std::abs(a.y - b.y);
-            return (dx > dy) ? (dy * 1.414) + (dx - dy) : (dx * 1.414) + (dy - dx);
+            return (dx > dy) ? (dy * 14) + (dx - dy) * 10 : (dx * 14) + (dy - dx) * 10;
         }
         std::vector<Vector2> reconstructPath(TileMap::Node* endNode) {
             std::vector<Vector2> path;
@@ -141,10 +141,7 @@ class TileMaster : public SceneObject {
     }
 
     // Determine if the move is diagonal or straight
-    int moveCost = (std::abs(neighborPos.x - currentNode->cell.x) == 1 &&
-                    std::abs(neighborPos.y - currentNode->cell.y) == 1) 
-                    ? 1.414 // Diagonal move
-                    : 1;    // Straight move
+    int moveCost = heuristic(currentNode->position, neighbor->position);
 
     int tentativeGCost = currentNode->GCost + moveCost;
 
