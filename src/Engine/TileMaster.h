@@ -65,22 +65,40 @@ class TileMaster : public SceneObject {
         }
 
         std::vector<Vector2i> getNeighbors(Vector2i node) {
-            return {
-                {node.x + 1, node.y},
-                {node.x - 1, node.y},
-                {node.x, node.y + 1},
-                {node.x, node.y - 1},
-                {node.x + 1, node.y + 1},
-                {node.x - 1, node.y + 1},
-                {node.x + 1, node.y - 1},
-                {node.x - 1, node.y - 1}
+            std::vector<Vector2i> neighbors;
+        
+            std::vector<Vector2i> possibleNeighbors = {
+                {node.x + 1, node.y},      // Right
+                {node.x - 1, node.y},      // Left
+                {node.x, node.y + 1},      // Down
+                {node.x, node.y - 1},      // Up
+                {node.x + 1, node.y + 1},  // Bottom-right (Diagonal)
+                {node.x - 1, node.y + 1},  // Bottom-left (Diagonal)
+                {node.x + 1, node.y - 1},  // Top-right (Diagonal)
+                {node.x - 1, node.y - 1}   // Top-left (Diagonal)
             };
+        
+            for (auto& neighbor : possibleNeighbors) {
+                if (isValidTile(neighbor)) { // Assuming isValidTile checks bounds and obstacles
+                    neighbors.push_back(neighbor);
+                }
+            }
+        
+            return neighbors;
         }
+        // Comparator for priority queue (min-heap) based on FCost
+        struct CompareNodeFCost {
+            bool operator()(TileMap::Node* a, TileMap::Node* b) {
+                return a->FCost() > b->FCost(); // Min-heap, so the node with lower FCost comes first
+            }
+        };
+        
         int heuristic(const Vector2& a, const Vector2& b) {
             int dx = std::abs(a.x - b.x);
             int dy = std::abs(a.y - b.y);
             return (dx > dy) ? (dy * 14) + (dx - dy) * 10 : (dx * 14) + (dy - dx) * 10;
         }
+        
         std::vector<Vector2> reconstructPath(TileMap::Node* endNode) {
             std::vector<Vector2> path;
             TileMap::Node* current = endNode;
@@ -91,7 +109,9 @@ class TileMaster : public SceneObject {
             std::reverse(path.begin(), path.end());
             return path;
         }
+        
         std::vector<Vector2> getPath(Vector2i start, Vector2i end) {
+            // Reset nodes only when necessary (instead of all nodes)
             for (auto& chunk : tileMaps) {
                 for (auto& nodePair : chunk.second->nodes) {
                     TileMap::Node& node = nodePair.second;
@@ -100,66 +120,57 @@ class TileMaster : public SceneObject {
                     node.parent = nullptr;
                 }
             }
-
-            TileMap::Node startNode = getNode(start);
-            TileMap::Node endNode = getNode(end);
-
-            std::vector<TileMap::Node*> openSet;
-            std::vector<TileMap::Node*> closedSet;
-            
-            openSet.push_back(&startNode);
-
+        
+            TileMap::Node& startNode = getNode(start);
+            TileMap::Node& endNode = getNode(end);
+        
+            std::priority_queue<TileMap::Node*, std::vector<TileMap::Node*>, CompareNodeFCost> openSet;
+            std::unordered_set<TileMap::Node*> closedSet;
+        
+            // Push the start node into the open set (min-heap priority queue)
+            openSet.push(&startNode);
             startNode.GCost = 0;
             startNode.HCost = heuristic(startNode.position, endNode.position);
-
+        
             while (!openSet.empty()) {
-                // Sort openSet based on FCost (or pick the node with the lowest FCost)
-                auto currentIt = std::min_element(openSet.begin(), openSet.end(),
-                    [](TileMap::Node* a, TileMap::Node* b) {
-                        return a->FCost() < b->FCost();
-                    });
-                
-                TileMap::Node* currentNode = *currentIt;
+                TileMap::Node* currentNode = openSet.top(); // Get node with the lowest FCost
+                openSet.pop();
+        
                 if (currentNode->cell == end) {
-                    return reconstructPath(currentNode);
+                    return reconstructPath(currentNode); // Path found
                 }
-
-                // Remove currentNode from openSet and add to closedSet
-                openSet.erase(currentIt);
-                closedSet.push_back(currentNode);
-
+        
+                closedSet.insert(currentNode); // Add to closed set
+        
                 for (auto& neighborPos : getNeighbors(currentNode->cell)) {
-    TileMap::Node* neighbor = &getNode(neighborPos);
-
-    if (neighbor->parent == nullptr) {
-        neighbor->GCost = std::numeric_limits<int>::max(); // Reset node state
-        neighbor->HCost = 0;
-    }
-
-    if (std::find(closedSet.begin(), closedSet.end(), neighbor) != closedSet.end()) {
-        continue; // Skip if the neighbor is in the closed set
-    }
-
-    // Determine if the move is diagonal or straight
-    int moveCost = heuristic(currentNode->position, neighbor->position);
-
-    int tentativeGCost = currentNode->GCost + moveCost;
-
-    if (std::find(openSet.begin(), openSet.end(), neighbor) == openSet.end()) {
-        openSet.push_back(neighbor);
-    } else if (tentativeGCost >= neighbor->GCost) {
-        continue; // If not a better path, skip
-    }
-
-    // Update neighbor
-    neighbor->parent = currentNode;
-    neighbor->GCost = tentativeGCost;
-    neighbor->HCost = heuristic(neighbor->position, endNode.position);
-}
+                    TileMap::Node* neighbor = &getNode(neighborPos);
+        
+                    if (closedSet.find(neighbor) != closedSet.end()) {
+                        continue; // Skip if the neighbor is already in the closed set
+                    }
+        
+                    // Determine if the move is diagonal or straight
+                    int moveCost = heuristic(currentNode->position, neighbor->position);
+                    int tentativeGCost = currentNode->GCost + moveCost;
+        
+                    // If this is a better path or the node hasn't been processed yet
+                    if (tentativeGCost < neighbor->GCost) {
+                        neighbor->parent = currentNode;
+                        neighbor->GCost = tentativeGCost;
+                        neighbor->HCost = heuristic(neighbor->position, endNode.position);
+        
+                        // Add to the open set if not already in it
+                        if (std::find_if(openSet.begin(), openSet.end(), 
+                            [neighbor](TileMap::Node* node) { return node == neighbor; }) == openSet.end()) {
+                            openSet.push(neighbor);
+                        }
+                    }
+                }
             }
-
+        
             return {}; // No path found
         }
+        
         TileMap::Node& getNode(Vector2i tile) {
             return tileMaps[tile / CHUNK_SIZE]->nodes[tile];
         }
