@@ -49,6 +49,7 @@ void TileMap::SetTile(int x, int y, int8_t id) {
     Vector2i cell = Vector2i(x, y);
     bool walkable = id == 0;
     tiles[cell] = { 192, 64, TILE_WIDTH, TILE_HEIGHT };
+    nodes[cell] = Node(cell);
 }
 
 void TileMap::Draw() const {
