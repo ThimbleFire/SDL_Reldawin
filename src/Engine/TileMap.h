@@ -35,6 +35,7 @@ class TileMap : public SceneObject {
         void HandleInput(InputEvent& event) override;
         void clear() {
             tiles.clear();
+            nodes.clear();
         }
     private:
         SDL_Texture* tile_texture;
