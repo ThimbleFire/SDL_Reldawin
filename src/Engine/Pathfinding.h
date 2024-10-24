@@ -13,29 +13,45 @@
 class Pathfinding {
     public:
         struct Node {
-            Vector2i position;
+            TileMap* tileMap;
+            Vector2i position_local;
+            
+            Vector2i position_global() const { 
+                return tileMap->index * CHUNK_SIZE + position_local;
+            }
+            
             Node* parent;
             int GCost; // Cost from start to this node
             int HCost; // Heuristic cost to end
-            int FCost() const { return GCost + HCost; }
-        
-            Node(Vector2i pos, Node* parentNode) : position(pos), parent(parentNode), GCost(0), HCost(0) {}
-        };
-        struct Vector2iComparator {
-            bool operator()(const Vector2i& a, const Vector2i& b) const {
-                if (a.x != b.x) return a.x < b.x; // Sort by x first
-                return a.y < b.y;                 // Then sort by y
+            int FCost() const { 
+                return GCost + HCost; 
             }
+        
+            Node(Vector2i pos, Node* parentNode) : 
+                position(pos), 
+                parent(parentNode), 
+                GCost(0), 
+                HCost(0) {
+                
+                }
         };
     public:
-        void populate(std::map<Vector2i, TileMap*, Vector2iComparator> tileMaps) {
-            for (auto& tileMap : tileMaps) {
-                //
+
+    void initialize(const std::unordered_map<Vector2i, TileMap*>& tileMaps) {
+        for (const auto& tileMapPair : tileMaps) {
+            TileMap* tileMap = tileMapPair.second;
+            for (int y = 0; y < CHUNK_SIZE; y++) {
+                for (int x = 0; x < CHUNK_SIZE; x++) {
+                    Vector2i tilePosition = tile.first;
+                    nodes[tileMap.index + Vector2i(x, y)] = new Node(tilePosition, nullptr);
+                }
             }
+            
         }
+    }
 
     public:
-        static std::map<Vector2i, Node*> nodes;
+        static std::unsorted_map<Vector2i, Node*> nodes;
 };
 
 extern Pathfinding g_pathfinder;
