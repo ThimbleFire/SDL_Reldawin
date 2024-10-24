@@ -8,7 +8,23 @@
 #include "ResourceRepository.h"
 
 class TileMap : public SceneObject {
-
+    public:
+        struct Node {
+            Vector2i position;
+            Node* parent = nullptr;
+            int GCost;
+            int HCost;
+            int FCost() const { 
+                return GCost + HCost; 
+            }
+        
+            Node(Vector2i pos) : 
+                position(pos), 
+                GCost(0), 
+                HCost(0) {
+                
+                }
+        };
     public:
         TileMap();
         ~TileMap();
@@ -23,6 +39,7 @@ class TileMap : public SceneObject {
     private:
         SDL_Texture* tile_texture;
         std::map<Vector2i, SDL_Rect> tiles;
+        std::map<Vector2i, Node> nodes;
 
 };
 
