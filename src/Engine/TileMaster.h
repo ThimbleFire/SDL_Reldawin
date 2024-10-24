@@ -16,7 +16,12 @@ class TileMaster : public SceneObject {
             texture = g_resourceRepository.load(path);
         }   
         ~TileMaster() {
-            SDL_DestroyTexture(texture);
+            SDL_DestroyTexture(texture);    
+            for (auto& chunkPair : tileMaps) {
+                delete chunkPair.second;
+            }
+            touchedNodes.clear();
+            tileMaps.clear();
         }
         void CreateStartChunks(Vector2i chunk_position) {
             for(int x = chunk_position.x - 1; x < chunk_position.x + 2; x++) 
@@ -130,6 +135,8 @@ class TileMaster : public SceneObject {
             openSet.push(&startNode);
             startNode.GCost = 0;
             startNode.HCost = heuristic(startNode.position, endNode.position);
+            
+            touchedNodes.insert(&startNode);
         
             while (!openSet.empty()) {
                 TileMap::Node* currentNode = openSet.top(); // Get node with the lowest FCost
@@ -140,6 +147,7 @@ class TileMaster : public SceneObject {
                 }
         
                 closedSet.insert(currentNode); // Add to closed set
+                touchedNodes.insert(currentNode);
         
                 for (auto& neighborPos : getNeighbors(currentNode->cell)) {
                     TileMap::Node* neighbor = &getNode(neighborPos);
@@ -163,6 +171,8 @@ class TileMaster : public SceneObject {
                             [neighbor](TileMap::Node* node) { return node == neighbor; }) == openSet.end()) {
                             openSet.push(neighbor);
                         }
+
+                        touchedNodes.insert(neighbor);
                     }
                 }
             }
