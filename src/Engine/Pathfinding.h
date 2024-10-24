@@ -27,8 +27,9 @@ class Pathfinding {
                 return GCost + HCost; 
             }
         
-            Node(Vector2i pos, Node* parentNode) : 
-                position(pos), 
+            Node(TileMap* tileMap, Vector2i pos, Node* parentNode) : 
+                tileMap(tileMap),
+                position_local(pos), 
                 parent(parentNode), 
                 GCost(0), 
                 HCost(0) {
@@ -42,8 +43,8 @@ class Pathfinding {
             TileMap* tileMap = tileMapPair.second;
             for (int y = 0; y < CHUNK_SIZE; y++) {
                 for (int x = 0; x < CHUNK_SIZE; x++) {
-                    Vector2i tilePosition = tile.first;
-                    nodes[tileMap.index + Vector2i(x, y)] = new Node(tilePosition, nullptr);
+                    Vector2i localPosition = Vector2i(x, y);
+                    nodes[tileMap.index + localPosition] = new Node(tileMap, localPosition, nullptr);
                 }
             }
             
