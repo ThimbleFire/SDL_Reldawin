@@ -8,6 +8,7 @@
 class TileMaster : public SceneObject {
     SDL_Texture* texture;
     std::map<Vector2i, TileMap*> tileMaps;
+    std::unordered_set<TileMap::Node*> touchedNodes;
 
     public:
 
@@ -111,15 +112,13 @@ class TileMaster : public SceneObject {
         }
         
         std::vector<Vector2> getPath(Vector2i start, Vector2i end) {
-            // Reset nodes only when necessary (instead of all nodes)
-            for (auto& chunk : tileMaps) {
-                for (auto& nodePair : chunk.second->nodes) {
-                    TileMap::Node& node = nodePair.second;
-                    node.GCost = std::numeric_limits<int>::max();
-                    node.HCost = 0;
-                    node.parent = nullptr;
-                }
+            // Reset only the nodes that were touched in the previous pathfinding run
+            for (TileMap::Node* node : touchedNodes) {
+                node->GCost = std::numeric_limits<int>::max();
+                node->HCost = 0;
+                node->parent = nullptr;
             }
+            touchedNodes.clear();  // Clear the set after resetting nodes
         
             TileMap::Node& startNode = getNode(start);
             TileMap::Node& endNode = getNode(end);
