@@ -8,6 +8,7 @@
 
 class TileMaster : public SceneObject {
     SDL_Texture* texture;
+    std::map<Vector2i, TileMap*> stuff;
 
     public:
 
@@ -27,7 +28,6 @@ class TileMaster : public SceneObject {
             }
         }
         
-        std::map<Vector2i, TileMap*> stuff;
 
         void onChunkChange(Vector2i new_chunk, Vector2i old_chunk) {
             Vector2i directionOfTravel = new_chunk - old_chunk;
@@ -64,6 +64,13 @@ class TileMaster : public SceneObject {
             if(new_chunk.x >= 0 && new_chunk.y >= 0) {
                 stuff[new_chunk]->CreateChunk(new_chunk.x, new_chunk.y);
             }
+        }
+
+        std::vector<Vector2i> getPath(Vector2i start, Vector2i end) {
+            Vector2i startChunkIndex = start / CHUNK_SIZE;
+            Vector2i endChunkIndex = end / CHUNK_SIZE;
+            cerr << end.ToString() + " in chunk " + startChunkIndex.ToString() << endl;
+            //stuff[endChunkIndex]->nodes[end]
         }
 
         void Draw() const override {
