@@ -5,15 +5,16 @@
 #include <map>
 #include "Vector2i.h"
 #include "TileMap.h"
+#include "TileMaster.h"
 
 class Pathfinding {
     public:
-        Pathfinding(std::map<Vector2i, TileMap*> maps);
+        Pathfinding(TileMaster* tMaster) : tileMaster(tMaster);
         ~Pathfinding();
         void GetPath();
 
     public:
-        std::array<TileMap*, 9> maps;
+        TileMaster* tileMaster;
 };
 
 extern Pathfinding g_pathfinder;
