@@ -73,11 +73,13 @@ class TileMaster : public SceneObject {
                 {node.x + 1, node.y + 1},
                 {node.x - 1, node.y + 1},
                 {node.x + 1, node.y - 1},
-                {node.x - 1, node.y - 1} 
+                {node.x - 1, node.y - 1}
             };
         }
         int heuristic(const Vector2& a, const Vector2& b) {
-            return std::abs(a.x - b.x) + std::abs(a.y - b.y);
+            int dx = std::abs(a.x - b.x);
+            int dy = std::abs(a.y - b.y);
+            return (dx > dy) ? (dy * 1.414) + (dx - dy) : (dx * 1.414) + (dy - dx);
         }
         std::vector<Vector2> reconstructPath(TileMap::Node* endNode) {
             std::vector<Vector2> path;
@@ -127,26 +129,36 @@ class TileMaster : public SceneObject {
                 closedSet.push_back(currentNode);
 
                 for (auto& neighborPos : getNeighbors(currentNode->cell)) {
-                    TileMap::Node* neighbor = &getNode(neighborPos);
+    TileMap::Node* neighbor = &getNode(neighborPos);
 
-                    if (std::find(closedSet.begin(), closedSet.end(), neighbor) != closedSet.end()) {
-                        continue; // Skip if the neighbor is in the closed set
-                    }
+    if (neighbor->parent == nullptr) {
+        neighbor->GCost = std::numeric_limits<int>::max(); // Reset node state
+        neighbor->HCost = 0;
+    }
 
-                    int tentativeGCost = currentNode->GCost + 1; // Assuming uniform cost for each move
+    if (std::find(closedSet.begin(), closedSet.end(), neighbor) != closedSet.end()) {
+        continue; // Skip if the neighbor is in the closed set
+    }
 
-                    // If the neighbor is not in the open set, or we found a cheaper path
-                    if (std::find(openSet.begin(), openSet.end(), neighbor) == openSet.end()) {
-                        openSet.push_back(neighbor);
-                    } else if (tentativeGCost >= neighbor->GCost) {
-                        continue;
-                    }
+    // Determine if the move is diagonal or straight
+    int moveCost = (std::abs(neighborPos.x - currentNode->cell.x) == 1 &&
+                    std::abs(neighborPos.y - currentNode->cell.y) == 1) 
+                    ? 1.414 // Diagonal move
+                    : 1;    // Straight move
 
-                    // Update neighbor
-                    neighbor->parent = currentNode;
-                    neighbor->GCost = tentativeGCost;
-                    neighbor->HCost = heuristic(neighbor->position, endNode.position);
-                }
+    int tentativeGCost = currentNode->GCost + moveCost;
+
+    if (std::find(openSet.begin(), openSet.end(), neighbor) == openSet.end()) {
+        openSet.push_back(neighbor);
+    } else if (tentativeGCost >= neighbor->GCost) {
+        continue; // If not a better path, skip
+    }
+
+    // Update neighbor
+    neighbor->parent = currentNode;
+    neighbor->GCost = tentativeGCost;
+    neighbor->HCost = heuristic(neighbor->position, endNode.position);
+}
             }
 
             return {}; // No path found
