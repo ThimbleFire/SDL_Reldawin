@@ -4,14 +4,13 @@
 #include <vector>
 #include <map>
 #include "Vector2i.h"
-#include "Tile.h"
 #include "TileMap.h"
 
 class Pathfinding {
     public:
-        Pathfinding();
+        Pathfinding(std::map<Vector2i, TileMap*> maps);
         ~Pathfinding();
-        void populate(std::map<Vector2i, TileMap*> stuff);
+        void GetPath();
 };
 
 extern Pathfinding g_pathfinder;
