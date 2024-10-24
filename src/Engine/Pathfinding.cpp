@@ -1,14 +1,10 @@
 #include "Pathfinding.h"
+#include "TileMaster.h"
 
 Pathfinding g_pathfinder;
 
-Pathfinding::Pathfinding(const std::map<Vector2i, TileMap*> maps) {
-    int index = 0;
-    for(const auto& pair : maps) {
-        this->maps[index++] = pair.second;
-    }
-}
+Pathfinding::Pathfinding(TileMaster* tMaster) : tileMaster(tMaster) {}
 Pathfinding::~Pathfinding() {}
-void Pathfinder::CalculatePath(Vector2i start, Vector2i end) {
+void Pathfinder::GetPath(Vector2i start, Vector2i end) {
 
 }
