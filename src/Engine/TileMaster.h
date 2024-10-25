@@ -105,9 +105,12 @@ class TileMaster : public SceneObject {
         };
         
         int heuristic(const Vector2& a, const Vector2& b) {
-            int dx = std::abs(a.x - b.x);
-            int dy = std::abs(a.y - b.y);
-            return (dx > dy) ? (dy * 14) + (dx - dy) * 10 : (dx * 14) + (dy - dx) * 10;
+            // Manhatten heuristic
+            //int dx = std::abs(a.x - b.x);
+            //int dy = std::abs(a.y - b.y);
+            //return (dx > dy) ? (dy * 14) + (dx - dy) * 10 : (dx * 14) + (dy - dx) * 10;
+            // Chebyshev heuristic
+            return std::max(abs(a.x - b.x), abs(a.y - b.y));
         }
         
         std::vector<Vector2> reconstructPath(TileMap::Node* endNode) {
