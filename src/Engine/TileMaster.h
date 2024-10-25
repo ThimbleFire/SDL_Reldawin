@@ -163,23 +163,21 @@ class TileMaster : public SceneObject {
                     if (closedSet.find(neighbor) != closedSet.end()) {
                         continue; // Skip if the neighbor is already in the closed set
                     }
-        
-                    // Determine if the move is diagonal or straight
-                    int moveCost = heuristic(currentNode->position, neighbor->position);
-                    int tentativeGCost = currentNode->GCost + moveCost;
-        
+                        
+                    int tentativeGCost = currentNode->GCost;
+                    
                     // If this is a better path or the node hasn't been processed yet
                     if (tentativeGCost < neighbor->GCost) {
                         neighbor->parent = currentNode;
                         neighbor->GCost = tentativeGCost;
-                        neighbor->HCost = heuristic(neighbor->position, endNode.position);
-        
+                        neighbor->HCost = heuristic(neighbor->position, endNode.position); // Correct usage
+                    
                         // Add to the open set if not already in it
                         if (std::find_if(openSet.begin(), openSet.end(), 
                             [neighbor](TileMap::Node* node) { return node == neighbor; }) == openSet.end()) {
                             openSet.push(neighbor);
                         }
-
+                    
                         touchedNodes.insert(neighbor);
                     }
                 }
