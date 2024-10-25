@@ -164,7 +164,7 @@ class TileMaster : public SceneObject {
                         continue; // Skip if the neighbor is already in the closed set
                     }
                         
-                    int tentativeGCost = currentNode->GCost;
+                    int tentativeGCost = currentNode->GCost + 1;
                     
                     // If this is a better path or the node hasn't been processed yet
                     if (tentativeGCost < neighbor->GCost) {
